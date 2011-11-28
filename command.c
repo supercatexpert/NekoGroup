@@ -31,6 +31,7 @@ static void ng_command_list_print_help(PurpleConvIm *conv_im)
     const gchar *text = "Command list:<br/>"
         "-help\t\t\t\t- print this help<br/>"
         "-online\t\t\t\t- show the users online now<br/>"
+        "-list\t\t\t\t- list all users<br/>"
         "-nick\t\t\t\t- see your nick name<br/>"
         "-nick newnick\t\t\t- set your name to newnick<br/>"
         "-talk user message\t- talk with another user privately<br/>"
@@ -38,6 +39,41 @@ static void ng_command_list_print_help(PurpleConvIm *conv_im)
         "-ping\t\t\t\t- check whether this group is still alive<br/>"
         "-about\t\t\t\t- about this group chatting program<br/>";
     purple_conv_im_send(conv_im, text);
+}
+
+static void ng_command_list_user(PurpleAccount *account,
+    PurpleConvIm *conv_im)
+{
+    GSList *list, *foreach;
+    PurpleBuddy *buddy;
+    gchar *chat_name;
+    guint count = 0;
+    GString *result_str;
+    const gchar *group_name;
+    result_str = g_string_new("User list:<br/>");
+    list = purple_find_buddies(account, NULL);
+    for(foreach=list;foreach!=NULL;foreach=g_slist_next(foreach))
+    {
+        buddy = foreach->data;
+        if(buddy==NULL) continue;
+        chat_name = ng_core_get_buddy_chat_name(buddy, NULL);
+        group_name = purple_group_get_name(purple_buddy_get_group(buddy));
+        if(PURPLE_BUDDY_IS_ONLINE(buddy))
+            g_string_append_printf(result_str, "[*");
+        else
+            g_string_append_printf(result_str, "[-");
+        if(g_strcmp0(group_name, "admin")==0)
+            g_string_append_printf(result_str, "#]");
+        else
+            g_string_append_printf(result_str, "-]");
+        g_string_append_printf(result_str, " %s<br/>", chat_name);
+        g_free(chat_name);
+        count++;
+    }
+    g_slist_free(list);
+    g_string_append_printf(result_str, "Total %u user(s)", count);
+    purple_conv_im_send(conv_im, result_str->str);
+    g_string_free(result_str, TRUE);
 }
 
 static void ng_command_list_online(PurpleAccount *account,
@@ -48,6 +84,7 @@ static void ng_command_list_online(PurpleAccount *account,
     gchar *chat_name;
     guint count = 0;
     GString *result_str;
+    const gchar *group_name;
     result_str = g_string_new("Online user list:<br/>");
     list = purple_find_buddies(account, NULL);
     for(foreach=list;foreach!=NULL;foreach=g_slist_next(foreach))
@@ -56,7 +93,11 @@ static void ng_command_list_online(PurpleAccount *account,
         if(buddy==NULL) continue;
         if(!PURPLE_BUDDY_IS_ONLINE(buddy)) continue;
         chat_name = ng_core_get_buddy_chat_name(buddy, NULL);
-        g_string_append_printf(result_str, "%s<br/>", chat_name);
+        group_name = purple_group_get_name(purple_buddy_get_group(buddy));
+        if(g_strcmp0(group_name, "admin")==0)
+            g_string_append_printf(result_str, "<b>%s</b><br/>", chat_name);
+        else
+            g_string_append_printf(result_str, "%s<br/>", chat_name);
         g_free(chat_name);
         count++;
     }
@@ -106,10 +147,9 @@ static void ng_command_config_nick(PurpleAccount *account,
                 old_name = ng_core_get_buddy_chat_name(buddy, NULL);
                 purple_blist_alias_buddy(buddy, new_name);
                 serv_alias_buddy(buddy);
-                result = g_strdup_printf("%s set his/her name to: %s",
+                result = g_strdup_printf("%s tried to set his/her name to: %s",
                     old_name, new_name);
                 g_free(old_name);
-                ng_core_do_broadcast(account, NULL, result);
                 ng_log_command_log(result);
                 g_free(result);
             }
@@ -133,7 +173,7 @@ static void ng_command_list_print_about(PurpleConvIm *conv_im)
 {
     const gchar *text = "About NekoGroup<br/>"
         "A group chatting robot based on libpurple.<br/>"
-        "Version: 0.0.1, build date: 2011-11-27<br/>"
+        "Version: 0.0.1, build date: 2011-11-28<br/>"
         "Copyright (C) 2011 - SuperCat, license: GPL v3.";
     purple_conv_im_send(conv_im, text);
 }
@@ -381,6 +421,7 @@ void ng_command_upgrade_user(PurpleAccount *account, PurpleConvIm *conv_im,
     {
         user = g_strstrip(cmd_list[1]);
         buddy = ng_core_get_buddy_by_nick(account, user);
+        if(buddy==NULL) buddy = purple_find_buddy(account, user);
     }
     g_strfreev(cmd_list);
     if(buddy==NULL) return;
@@ -403,6 +444,7 @@ void ng_command_downgrade_user(PurpleAccount *account, PurpleConvIm *conv_im,
     gchar *user = NULL;
     gchar **cmd_list;
     PurpleBuddy *buddy = NULL;
+    PurpleGroup *group;
     gint level = 0;
     conv = purple_conv_im_get_conversation(conv_im);
     if(conv==NULL) return;
@@ -424,7 +466,14 @@ void ng_command_downgrade_user(PurpleAccount *account, PurpleConvIm *conv_im,
     }
     g_strfreev(cmd_list);
     if(buddy==NULL) return;
-    purple_blist_add_buddy(buddy, NULL, NULL, NULL);
+    group = purple_find_group("user");
+    if(group==NULL)
+    {
+        group = purple_group_new("user");
+        purple_blist_add_group(group, NULL);
+    }
+    if(group==NULL) return;
+    purple_blist_add_buddy(buddy, NULL, group, NULL);
 }
 
 
@@ -445,6 +494,11 @@ gboolean ng_command_use(PurpleAccount *account, PurpleConvIm *conv_im,
     else if(g_strcmp0(command, "-online")==0)
     {
         ng_command_list_online(account, conv_im);
+        return TRUE;
+    }
+    else if(g_strcmp0(command, "-list")==0)
+    {
+        ng_command_list_user(account, conv_im);
         return TRUE;
     }
     else if(strncmp(command, "-history", 8)==0)

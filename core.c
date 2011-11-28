@@ -163,6 +163,7 @@ static void ng_core_received_im_msg(PurpleAccount *account, gchar *sender,
     gchar *tmp1, *tmp2, *msg;
     if(conv==NULL)
         conv = purple_conversation_new(PURPLE_CONV_TYPE_IM, account, sender);
+    purple_conversation_set_logging(conv, FALSE);
     if(message==NULL) return;
     tmp1 = purple_markup_strip_html(message);
     if(tmp1==NULL) return;
@@ -189,6 +190,84 @@ static void ng_core_received_im_msg(PurpleAccount *account, gchar *sender,
     g_free(return_msg);
 }
 
+static void ng_core_buddy_added(PurpleBuddy *buddy)
+{
+    const gchar *group_name;
+    gchar *short_name;
+    gchar *text;
+    gchar *nick;
+    PurpleAccount *account;
+    PurpleGroup *group;
+    account = purple_buddy_get_account(buddy);
+    if(account==NULL) return;
+    short_name = g_strdup(purple_buddy_get_name(buddy));
+    if(short_name==NULL) short_name = g_strdup("unknown user");
+    g_strdelimit(short_name, "@", '\0');
+    group = purple_buddy_get_group(buddy);
+    group_name = purple_group_get_name(group);
+    if(g_strcmp0(group_name, "admin")==0)
+    {
+        nick = ng_core_get_buddy_chat_name(buddy, short_name);
+        text = g_strdup_printf("User %s was upgraded to be an administrator!",
+            nick);
+        g_free(nick);
+    }
+    else if(g_strcmp0(group_name, "user")==0)
+    {
+        nick = ng_core_get_buddy_chat_name(buddy, short_name);
+        text = g_strdup_printf("User %s was downgraded to be a normal user!",
+            nick);
+        g_free(nick);
+    }
+    else
+        text = g_strdup_printf("User %s was added to this group", short_name);
+    g_free(short_name);
+    ng_core_do_broadcast(account, NULL, text);
+    g_free(text);
+}
+
+static void ng_core_buddy_removed(PurpleBuddy *buddy)
+{
+    gchar *name;
+    gchar *text;
+    PurpleAccount *account;
+    account = purple_buddy_get_account(buddy);
+    if(account==NULL) return;
+    name = ng_core_get_buddy_chat_name(buddy, NULL);;
+    if(name==NULL) name = g_strdup("unknown user");
+    text = g_strdup_printf("User %s was kicked from this group", name);
+    g_free(name);
+    ng_core_do_broadcast(account, NULL, text);
+    g_free(text);
+}
+
+static void ng_core_buddy_aliased(PurpleBlistNode *node,
+    const gchar *old_alias)
+{
+    const gchar *new_name = NULL;
+    gchar *old_name = NULL;
+    gchar *text;
+    PurpleBuddy *buddy;
+    PurpleAccount *account;
+    if(node==NULL) return;
+    if(purple_blist_node_get_type(node)!=PURPLE_BLIST_BUDDY_NODE) return;
+    buddy = PURPLE_BUDDY(node);
+    account = purple_buddy_get_account(buddy);
+    if(account==NULL) return;
+    if(old_alias==NULL)
+    {
+        old_name = g_strdup(purple_buddy_get_name(buddy));
+        if(old_name!=NULL) old_name = g_strdelimit(old_name, "@", '\0');
+    }
+    else
+        old_name = g_strdup(old_alias);
+    new_name = purple_buddy_get_alias_only(buddy);
+    text = g_strdup_printf("%s set his/her name to: %s", old_name, new_name);
+    if(old_name!=NULL) g_free(old_name);
+    ng_core_do_broadcast(account, NULL, text);
+    g_free(text);
+}
+
 static void ng_core_connect_signals()
 {
     static gint handle;
@@ -196,20 +275,22 @@ static void ng_core_connect_signals()
         &handle, PURPLE_CALLBACK(ng_core_signed_on), NULL);
     purple_signal_connect(purple_conversations_get_handle(), "received-im-msg",
         &handle, PURPLE_CALLBACK(ng_core_received_im_msg), NULL);
+    purple_signal_connect(purple_blist_get_handle(), "buddy-added",
+        &handle, PURPLE_CALLBACK(ng_core_buddy_added), NULL);
+    purple_signal_connect(purple_blist_get_handle(), "buddy-removed",
+        &handle, PURPLE_CALLBACK(ng_core_buddy_removed), NULL);
+    purple_signal_connect(purple_blist_get_handle(), "blist-node-aliased",
+        &handle, PURPLE_CALLBACK(ng_core_buddy_aliased), NULL);
 }
 
 static gint ng_core_account_auth_requested_cb(PurpleAccount *account,
     const gchar *user)
 {
     gchar *text;
-    gchar *short_name;
     ng_debug_module_pmsg(module_name, "User %s wants to join group %s.",
         user, purple_account_get_username(account));
-    short_name = g_strdup(user);
-    g_strdelimit(short_name, "@", '\0');
     text = g_strdup_printf("User: %s joined this group, requesting "
-        "authorization...", short_name);
-    g_free(short_name);
+        "authorization...", user);
     ng_core_do_broadcast(account, NULL, text);
     g_free(text);
     return 1;
@@ -291,7 +372,11 @@ gboolean ng_core_init(gint *argc, gchar **argv[])
 {
     gboolean flag = FALSE;
     gchar *keyfile_path;
-    purple_util_set_user_dir("/dev/null");
+    gchar *data_path;
+    ng_core_program_dir = ng_core_get_program_dir(*argv[0]);
+    data_path = g_build_filename(ng_core_program_dir, "data", NULL);
+    purple_util_set_user_dir(data_path);
+    g_free(data_path);
     purple_debug_set_enabled(FALSE);
     purple_core_set_ui_ops(&ng_core_uiops);
     purple_eventloop_set_ui_ops(&ng_core_glib_eventloops);
@@ -309,12 +394,11 @@ gboolean ng_core_init(gint *argc, gchar **argv[])
     purple_pounces_load();
     ng_debug_module_pmsg(module_name, "libpurple initialized. "
         "Running version %s.", purple_core_get_version());
-    ng_core_program_dir = ng_core_get_program_dir(*argv[0]);
     ng_core_config = g_key_file_new();
     if(ng_core_program_dir!=NULL)
     {
-        keyfile_path = g_build_filename(ng_core_program_dir, "config.ini",
-            NULL);
+        keyfile_path = g_build_filename(ng_core_program_dir, "data",
+            "config.ini", NULL);
         flag = g_key_file_load_from_file(ng_core_config, keyfile_path,
             G_KEY_FILE_NONE, NULL);
         g_free(keyfile_path);
@@ -338,7 +422,9 @@ gboolean ng_core_account_init()
     gchar **groups;
     PurpleAccount *account = NULL;
     PurpleSavedStatus *status;
-    gchar *id, *pass, *protocol, *title, *root;
+    gchar *id, *pass, *protocol, *title, *root, *server;
+    gboolean req_tls;
+    gint port;
     groups = g_key_file_get_groups(ng_core_config, &length);
     if(groups==NULL) return FALSE;
     for(i=0;groups[i]!=NULL;i++)
@@ -351,11 +437,23 @@ gboolean ng_core_account_init()
                 "ID", NULL);
             pass = g_key_file_get_string(ng_core_config, groups[i],
                 "Password", NULL);
+            server = g_key_file_get_string(ng_core_config, groups[i],
+                "Server", NULL);
+            req_tls = g_key_file_get_boolean(ng_core_config, groups[i],
+                "RequireTLS", NULL);
+            port = g_key_file_get_boolean(ng_core_config, groups[i],
+                "Port", NULL);
             if(protocol!=NULL && strlen(protocol)>0 && id!=NULL &&
                 strlen(id)>0 && pass!=NULL && strlen(pass)>0)
             {
                 account = purple_account_new(id, protocol);
                 purple_account_set_password(account, pass);
+                if(port>0 && port<65535)
+                    purple_account_set_int(account, "port", port);
+                if(req_tls)
+                    purple_account_set_bool(account, "require_tls", TRUE);
+                if(server!=NULL)
+                    purple_account_set_string(account, "server", server);
                 purple_accounts_add(account);
                 purple_account_set_enabled(account, ng_core_get_ui_id(),
                     TRUE);
@@ -390,6 +488,7 @@ gboolean ng_core_account_init()
             if(protocol!=NULL) g_free(protocol);
             if(id!=NULL) g_free(id);
             if(pass!=NULL) g_free(pass);
+            if(server!=NULL) g_free(server);
         }
     }
     if(count>=1)
