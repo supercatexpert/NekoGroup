@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS Members (
+    jid TEXT PRIMARY KEY,
+    nick TEXT UNIQUE,
+    join_time DATE,
+    rename_freq INTEGER DEFAULT 0,
+    rename_time DATE,
+    msg_count INTEGER DEFAULT 0,
+    stop_time DATE,
+    ban_time DATE,
+    allow_pm INTEGER DEFAULT 1,
+    privilege INTEGER DEFAULT 0
+);
