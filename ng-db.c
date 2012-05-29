@@ -28,6 +28,7 @@
 #include "ng-core.h"
 #include "ng-bot.h"
 #include "ng-config.h"
+#include "ng-utils.h"
 
 #define NG_DB_DATABASE_NAME "NekoGroupDb"
 
@@ -61,6 +62,17 @@ static inline bson *ng_db_member_bson_build(const NGDbMemberData *member_data)
         BSON_TYPE_BOOLEAN, "stopped", member_data->stopped,
         BSON_TYPE_BOOLEAN, "allow_pm", member_data->allow_pm,
         BSON_TYPE_INT32, "privilege", member_data->privilege,
+        BSON_TYPE_NONE);
+    bson_finish(doc);
+    return doc;
+}
+
+static inline bson *ng_db_log_bson_build(const NGDbLogData *log_data)
+{
+    bson *doc;
+    doc = bson_build(BSON_TYPE_UTC_DATETIME, "time", log_data->time,
+        BSON_TYPE_STRING, "jid", log_data->jid, -1,
+        BSON_TYPE_STRING, "message", log_data->message, -1,
         BSON_TYPE_NONE);
     bson_finish(doc);
     return doc;
@@ -153,6 +165,33 @@ static inline void ng_db_member_data_from_bson(const bson *doc,
             member_data->privilege = vint;
         bson_cursor_free(cursor);
     }  
+}
+
+static inline void ng_db_log_data_from_bson(const bson *doc,
+    NGDbLogData *log_data)
+{
+    bson_cursor *cursor;
+    const gchar *vstring;
+    cursor = bson_find(doc, "time");
+    if(cursor!=NULL)
+    {
+        bson_cursor_get_utc_datetime(cursor, &(log_data->time));
+        bson_cursor_free(cursor);
+    }
+    cursor = bson_find(doc, "jid");
+    if(cursor!=NULL)
+    {
+        if(bson_cursor_get_string(cursor, &vstring))
+            log_data->jid = g_strdup(vstring);
+        bson_cursor_free(cursor);
+    }
+    cursor = bson_find(doc, "message");
+    if(cursor!=NULL)
+    {
+        if(bson_cursor_get_string(cursor, &vstring))
+            log_data->message = g_strdup(vstring);
+        bson_cursor_free(cursor);
+    }
 }
 
 gboolean ng_db_init(const gchar *host, gint port,
@@ -248,7 +287,7 @@ guint ng_db_member_foreach(NGDbMemberForeachFunc func, gpointer data)
     bson *result;
     gchar *ns;
     guint count = 0;
-    NGDbMemberData member_data;
+    NGDbMemberData member_data = {0};
     if(priv->db_connection==NULL) return 0;
     ns = g_strconcat(NG_DB_DATABASE_NAME, ".", priv->member_collection,
         NULL);
@@ -438,11 +477,11 @@ gboolean ng_db_member_jid_add(const gchar *jid, const gchar *nick)
     gchar *ns;
     gboolean flag;
     if(jid==NULL) return FALSE;
-    if(priv->db_connection==NULL) return FALSE;
+    if(priv->db_connection==NULL || jid==NULL) return FALSE;
     member_data.jid = g_strdup(jid);
     if(nick==NULL)
     {
-        member_data.nick = ng_bot_generate_new_nick(jid);
+        member_data.nick = ng_utils_generate_new_nick(jid);
     }
     else
         member_data.nick = g_strdup(nick);
@@ -1047,5 +1086,147 @@ gboolean ng_db_member_nick_get_jid(const gchar *nick, gchar **jid)
     }
     mongo_sync_cursor_free(cursor);
     return flag;
+}
+
+guint ng_db_log_foreach(NGDbLogForeachFunc func, gpointer data)
+{
+    NGDbPrivate *priv = &ng_db_priv;
+    mongo_packet *packet;
+    mongo_sync_cursor *cursor;
+    bson *query;
+    bson *result;
+    gchar *ns;
+    guint count = 0;
+    NGDbLogData log_data = {0};
+    if(priv->db_connection==NULL) return 0;
+    ns = g_strconcat(NG_DB_DATABASE_NAME, ".", priv->log_collection,
+        NULL);
+    query = bson_new();
+    bson_finish(query);
+    packet = mongo_sync_cmd_query(priv->db_connection, ns, 0, 0, 0,
+        query, NULL);
+    bson_free(query);
+    if(packet==NULL)
+    {
+        g_free(ns);
+        return 0;
+    }
+    cursor = mongo_sync_cursor_new(priv->db_connection, ns, packet);
+    g_free(ns);
+    if(cursor==NULL) return 0;
+    while(mongo_sync_cursor_next(cursor))
+    {
+        result = mongo_sync_cursor_get_data(cursor);
+        if(result==NULL) continue;
+        memset(&log_data, 0, sizeof(NGDbLogData));
+        ng_db_log_data_from_bson(result, &log_data);
+        func(&log_data, data);
+        ng_db_log_data_free(&log_data);
+        bson_free(result);
+        count++;
+    }
+    mongo_sync_cursor_free(cursor);
+    return count;
+}
+
+void ng_db_log_data_free(NGDbLogData *data)
+{
+    if(data==NULL) return;
+    g_free(data->jid);
+    g_free(data->message);
+    data->jid = NULL;
+    data->message = NULL;
+}
+
+void ng_db_log_data_destroy(NGDbLogData *data)
+{
+    if(data==NULL) return;
+    ng_db_log_data_free(data);
+    g_free(data);
+}
+
+gboolean ng_db_log_add_message(const gchar *jid, const gchar *message)
+{
+    NGDbPrivate *priv = &ng_db_priv;
+    NGDbLogData log_data = {0};
+    bson *log_doc;
+    gchar *ns;
+    gboolean flag = FALSE;
+    if(jid==NULL) return FALSE;
+    if(priv->db_connection==NULL || message==NULL) return FALSE;
+    log_data.jid = g_strdup(jid);
+    log_data.message = g_strdup(message);
+    log_data.time = g_get_real_time()/1000;
+    log_doc = ng_db_log_bson_build(&log_data);
+    ng_db_log_data_free(&log_data);
+    ns = g_strconcat(NG_DB_DATABASE_NAME, ".", priv->log_collection,
+        NULL);
+    flag = mongo_sync_cmd_insert(priv->db_connection, ns, log_doc, NULL);
+    g_free(ns);
+    bson_free(log_doc);
+    return flag;
+}
+
+GList *ng_db_log_get_data(gint64 time, guint num)
+{
+    GList *list = NULL;
+    NGDbLogData *log_data;
+    NGDbPrivate *priv = &ng_db_priv;
+    mongo_packet *packet;
+    mongo_sync_cursor *cursor;
+    bson *query;
+    bson *query_doc;
+    bson *result;
+    bson *cond;
+    gchar *ns;
+    gint64 query_time;
+    if(priv->db_connection==NULL) return NULL;
+    ns = g_strconcat(NG_DB_DATABASE_NAME, ".", priv->log_collection,
+        NULL);
+    query = bson_build_full(BSON_TYPE_DOCUMENT, "$orderby", TRUE,
+        bson_build(BSON_TYPE_INT32, "time", -1, BSON_TYPE_NONE),
+        BSON_TYPE_NONE);
+    query_doc = bson_new();
+    if(time>0)    
+    {
+        query_doc = bson_new();
+        if(time>0)
+        {
+            query_time = g_get_real_time()/1000 - time;
+            cond = bson_build_full(BSON_TYPE_DOCUMENT, "$gte", TRUE,
+               bson_build(BSON_TYPE_UTC_DATETIME, "time", query_time,
+               BSON_TYPE_NONE), BSON_TYPE_NONE);
+            bson_finish(cond);
+            bson_append_document(query, "time", cond);
+            bson_free(cond);
+        }
+    }
+    bson_finish(query_doc);
+    bson_append_document(query, "$query", query_doc);
+    bson_free(query_doc);
+    bson_finish(query);
+    if(num<0) num = 0;
+    packet = mongo_sync_cmd_query(priv->db_connection, ns, 0, 0, num,
+        query, NULL);
+    bson_free(query);
+    if(packet==NULL)
+    {
+        g_free(ns);
+        return NULL;
+    }
+    cursor = mongo_sync_cursor_new(priv->db_connection, ns, packet);
+    g_free(ns);
+    if(cursor==NULL) return 0;
+    while(mongo_sync_cursor_next(cursor))
+    {
+        result = mongo_sync_cursor_get_data(cursor);
+        if(result==NULL) continue;
+        log_data = g_new0(NGDbLogData, 1);
+        ng_db_log_data_from_bson(result, log_data);
+        list = g_list_prepend(list, log_data);
+        bson_free(result);
+    }
+    mongo_sync_cursor_free(cursor);
+    return list;
 }
 

@@ -1,7 +1,9 @@
 CC=gcc
 PROG_NAME=NekoGroup
-SOURCES=ng-core.c ng-db.c ng-cmd.c ng-config.c ng-bot.c ng-main.c main.c
-HEADERS=ng-core.h ng-db.h ng-cmd.h ng-config.h ng-bot.h ng-main.h ng-common.h
+SOURCES=ng-core.c ng-db.c ng-cmd.c ng-config.c ng-bot.c \
+    ng-main.c ng-utils.c main.c
+HEADERS=ng-core.h ng-db.h ng-cmd.h ng-config.h ng-bot.h \
+    ng-main.h ng-utils.h ng-common.h
 PKGS=glib-2.0 gobject-2.0 loudmouth-1.0 libmongo-client
 
 SRCS=${SOURCES} ng-marshal.c

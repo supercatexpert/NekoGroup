@@ -49,7 +49,7 @@ gboolean ng_main_run(gint *argc, gchar **argv[])
     {
         g_error("Cannot initialize database!");
         return FALSE;
-    }
+    }    
     if(ng_core_init(server_data->server, server_data->port,
         server_data->require_tls, server_data->jid, server_data->user,
         server_data->password)!=0)

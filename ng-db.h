@@ -40,7 +40,10 @@ typedef enum NGDbUserPrivilegeLevel {
 }NGDbUserPrivilegeLevel;
 
 typedef struct NGDbMemberData NGDbMemberData;
+typedef struct NGDbLogData NGDbLogData;
 typedef void (*NGDbMemberForeachFunc)(const NGDbMemberData *mem_data,
+    gpointer data);
+typedef void (*NGDbLogForeachFunc)(const NGDbLogData *log_data,
     gpointer data);
 
 struct NGDbMemberData {
@@ -57,6 +60,12 @@ struct NGDbMemberData {
     gboolean stopped;
     gboolean allow_pm;
     NGDbUserPrivilegeLevel privilege;
+};
+
+struct NGDbLogData {
+    gint64 time;
+    gchar *jid;
+    gchar *message;
 };
 
 gboolean ng_db_init(const gchar *host, gint port,
@@ -91,6 +100,11 @@ gboolean ng_db_member_get_stopped(const gchar *jid, gboolean *stopped,
 gboolean ng_db_member_get_allow_pm(const gchar *jid, gboolean *state);
 gboolean ng_db_member_nick_exist(const gchar *nick);
 gboolean ng_db_member_nick_get_jid(const gchar *nick, gchar **jid);
+guint ng_db_log_foreach(NGDbLogForeachFunc func, gpointer data);
+void ng_db_log_data_free(NGDbLogData *data);
+void ng_db_log_data_destroy(NGDbLogData *data);
+gboolean ng_db_log_add_message(const gchar *jid, const gchar *message);
+GList *ng_db_log_get_data(gint64 time, guint num);
 
 G_END_DECLS
 

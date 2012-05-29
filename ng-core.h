@@ -93,9 +93,6 @@ gulong ng_core_signal_connect(const gchar *name,
     GCallback callback, gpointer data);
 void ng_core_signal_disconnect(gulong handler_id);
 gboolean ng_core_send_message(const gchar *jid, const gchar *message);
-gchar *ng_core_get_jid_from_address(const gchar *address);
-gchar *ng_core_get_resource_from_address(const gchar *address);
-gchar *ng_core_get_shortname(const gchar *jid);
 gboolean ng_core_send_subscribe_request(const gchar *jid);
 gboolean ng_core_send_subscribed_message(const gchar *jid);
 gboolean ng_core_send_unsubscribe_request(const gchar *jid);
@@ -103,6 +100,7 @@ gboolean ng_core_send_unsubscribed_message(const gchar *jid);
 gboolean ng_core_set_title(const gchar *title);
 gboolean ng_core_add_roster(const gchar *jid);
 gboolean ng_core_remove_roster(const gchar *jid);
+gboolean ng_core_send_unavailable_message();
 
 G_END_DECLS
 

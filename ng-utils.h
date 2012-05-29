@@ -1,7 +1,7 @@
 /*
- * NekoGroup Bot Kernel Header Declaration
+ * NekoGroup Utility API Header Declaration
  *
- * ng-bot.h
+ * ng-utils.h
  * This file is part of NekoGroup
  *
  * Copyright (C) 2012 - SuperCat, license: GPL v3
@@ -22,31 +22,19 @@
  * Boston, MA  02110-1301  USA
  */
 
-#ifndef HAVE_NG_BOT_H
-#define HAVE_NG_BOT_H
+#ifndef HAVE_NG_UTILS_H
+#define HAVE_NG_UTILS_H
 
+#include <stdlib.h>
+#include <string.h>
 #include <glib.h>
-#include <ctype.h>
 
 G_BEGIN_DECLS
 
-typedef struct NGBotMemberData NGBotMemberData;
-
-struct NGBotMemberData {
-    gchar *jid;
-    gchar *subscription;
-    gchar *resource;
-    gchar *status;
-    gboolean online;
-};
-
-void ng_bot_init();
-void ng_bot_exit();
-gchar *ng_bot_get_nick_by_jid(const gchar *jid, const gchar *nick);
-void ng_bot_broadcast(const gchar *from, const gchar *message);
-GHashTable *ng_bot_get_member_table();
-const NGBotMemberData *ng_bot_get_member_data(const gchar *jid);
-void ng_bot_member_data_remove(const gchar *jid);
+gchar *ng_utils_get_jid_from_address(const gchar *address);
+gchar *ng_utils_get_resource_from_address(const gchar *address);
+gchar *ng_utils_get_shortname(const gchar *jid);
+gchar *ng_utils_generate_new_nick(const gchar *jid);
 
 G_END_DECLS
 

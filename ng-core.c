@@ -25,6 +25,7 @@
 #include "ng-core.h"
 #include "ng-common.h"
 #include "ng-main.h"
+#include "ng-utils.h"
 #include "ng-marshal.h"
 
 /**
@@ -88,7 +89,7 @@ static LmHandlerResult ng_core_message_handle_func(LmMessageHandler *handler,
     from = lm_message_node_get_attribute(node, "from");
     type = lm_message_node_get_attribute(node, "type");
     body = lm_message_node_get_value(body_node);
-    jid = ng_core_get_jid_from_address(from);
+    jid = ng_utils_get_jid_from_address(from);
     if(jid==NULL) jid = g_strdup(from);
     if(from==NULL || body==NULL) 
     {
@@ -117,14 +118,14 @@ static LmHandlerResult ng_core_presence_handle_func(LmMessageHandler *handler,
     if(node==NULL) return LM_HANDLER_RESULT_REMOVE_MESSAGE;    
     type = lm_message_node_get_attribute(node, "type");
     from = lm_message_node_get_attribute(node, "from");
-    jid = ng_core_get_jid_from_address(from);
+    jid = ng_utils_get_jid_from_address(from);
     if(jid==NULL) jid = g_strdup(from);
     if(g_strcmp0(jid, lm_connection_get_jid(connection))==0)
     {
         g_free(jid);
         return LM_HANDLER_RESULT_REMOVE_MESSAGE;
     }
-    resource = ng_core_get_resource_from_address(from);
+    resource = ng_utils_get_resource_from_address(from);
     if(type!=NULL && from!=NULL)
     {
         if(g_strcmp0(type, "subscribe")==0)
@@ -481,35 +482,6 @@ gboolean ng_core_send_message(const gchar *jid, const gchar *message)
     return flag;
 }
 
-gchar *ng_core_get_jid_from_address(const gchar *address)
-{
-    gchar *jid, *tmp;
-    tmp = g_strdup(address);
-    tmp = g_strdelimit(tmp, "/", '\0');
-    jid = g_strdup(tmp);
-    g_free(tmp);
-    return jid;
-}
-
-gchar *ng_core_get_resource_from_address(const gchar *address)
-{
-    gchar *resource = NULL, *tmp;
-    tmp = g_strstr_len(address, -1, "/");
-    if(tmp!=NULL)
-        resource = g_strdup(tmp+1);
-    return resource;
-}
-
-gchar *ng_core_get_shortname(const gchar *jid)
-{
-    gchar *short_name, *tmp;
-    tmp = g_strdup(jid);
-    tmp = g_strdelimit(tmp, "@", '\0');
-    short_name = g_strdup(tmp);
-    g_free(tmp);
-    return short_name;
-}
-
 gboolean ng_core_send_subscribe_request(const gchar *jid)
 {
     NGCorePrivate *priv = NULL;
@@ -620,13 +592,28 @@ gboolean ng_core_remove_roster(const gchar *jid)
     if(priv==NULL) return FALSE;
     msg = lm_message_new_with_sub_type(NULL, LM_MESSAGE_TYPE_IQ,
         LM_MESSAGE_SUB_TYPE_SET);
-    lm_message_node_set_attribute(msg->node, "id", "adduser1");
+    lm_message_node_set_attribute(msg->node, "id", "removeuser1");
     query_node = lm_message_node_add_child(msg->node, "query", NULL);
     lm_message_node_set_attribute(query_node, "xmlns", "jabber:iq:roster");
     item_node = lm_message_node_add_child(query_node, "item", NULL);
     lm_message_node_set_attribute(item_node, "jid", jid);
     lm_message_node_set_attribute(item_node, "subscription", "remove");
     lm_connection_send(priv->connection, msg, NULL);
+    lm_message_unref(msg);
+    return flag;
+}
+
+gboolean ng_core_send_unavailable_message()
+{
+    NGCorePrivate *priv = NULL;
+    LmMessage *msg;
+    gboolean flag;
+    if(core_instance==NULL) return FALSE;
+    priv = NG_CORE_GET_PRIVATE(core_instance);
+    if(priv==NULL) return FALSE;
+    msg = lm_message_new_with_sub_type(NULL, LM_MESSAGE_TYPE_PRESENCE,
+        LM_MESSAGE_SUB_TYPE_UNAVAILABLE);
+    flag = lm_connection_send(priv->connection, msg, NULL);
     lm_message_unref(msg);
     return flag;
 }

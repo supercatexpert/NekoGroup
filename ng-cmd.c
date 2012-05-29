@@ -29,6 +29,8 @@
 #include "ng-db.h"
 #include "ng-bot.h"
 #include "ng-config.h"
+#include "ng-utils.h"
+#include "ng-main.h"
 
 #define NG_CMD_RENICK_TIME_LIMIT 10*60*1000
 
@@ -48,6 +50,15 @@ static void ng_cmd_ping(const gchar *jid)
         "\n", '\0'));
     ng_core_send_message(jid, text);
     g_free(text);
+}
+
+static void ng_cmd_about(const gchar *jid)
+{
+    const gchar *text = _("About NekoGroup\n"
+        "A group chatting robot based on GLib and libloudmouth.\n"
+        "Version: 0.1.0, build date: 2012-05-29\n"
+        "Copyright (C) 2012 - SuperCat, license: GPL v3.");
+    ng_core_send_message(jid, text);
 }
 
 static gboolean ng_cmd_member_add(const gchar *jid, gint number, gchar **list)
@@ -441,7 +452,7 @@ static gboolean ng_cmd_member_pm(const gchar *jid, const gchar *target,
         return TRUE;
     }
     if(!ng_db_member_get_nick_name(jid, &nick))
-        nick = ng_bot_generate_new_nick(jid);
+        nick = ng_utils_generate_new_nick(jid);
     result_string = g_string_new("");
     g_string_append_printf(result_string, _("(P.M.) [%s] "), nick);
     g_free(nick);
@@ -461,7 +472,7 @@ gboolean ng_cmd_member_quit(const gchar *jid)
     gchar *nick = NULL;
     if(jid==NULL) return FALSE;
     if(!ng_db_member_get_nick_name(jid, &nick))
-        nick = ng_bot_generate_new_nick(jid);
+        nick = ng_utils_generate_new_nick(jid);
     text = g_strdup_printf("%s has left from this group, good bye!", nick);
     g_free(nick);
     ng_bot_broadcast(NULL, text);
@@ -632,7 +643,7 @@ static gboolean ng_cmd_member_ban(const gchar *jid, const gchar *victim,
     {
         ng_db_member_set_banned(target_jid, FALSE, 0);
         text = g_strdup_printf(_("%s has been released from banned state."),
-            target_jid);
+            victim);
         ng_bot_broadcast(NULL, text);
         g_free(text);
         g_free(target_jid);
@@ -705,6 +716,74 @@ static gboolean ng_cmd_set_group_title(const gchar *jid, const gchar *title)
     return TRUE;
 }
 
+static gboolean ng_cmd_member_kick(const gchar *jid, const gchar *victim)
+{
+    gchar *text;
+    NGDbUserPrivilegeLevel level, victim_level;
+    gchar *target_jid = NULL;
+    if(jid==NULL || victim==NULL) return FALSE;
+    if(!ng_db_member_get_privilege_level(jid, &level)) return FALSE;
+    if(level<NG_DB_USER_PRIVILEGE_POWER)
+    {
+        ng_core_send_message(jid, _("Permission denied."));
+        return TRUE;
+    }
+    if(!ng_db_member_nick_get_jid(victim, &target_jid))
+    {
+        if(!ng_db_member_jid_exist(victim))
+        {
+            ng_core_send_message(jid, _("Target member does not exist!"));
+            return TRUE;
+        }
+        else
+            target_jid = g_strdup(victim);
+    }
+    if(!ng_db_member_get_privilege_level(target_jid, &victim_level))
+    {
+        g_free(target_jid);
+        return FALSE;
+    }
+    if(victim_level==NG_DB_USER_PRIVILEGE_ROOT)
+    {
+        ng_core_send_message(jid, _("Root users cannot be kicked!"));
+        g_free(target_jid);
+        return TRUE;
+    }
+    if(level==NG_DB_USER_PRIVILEGE_POWER &&
+        victim_level>=NG_DB_USER_PRIVILEGE_POWER)
+    {
+        ng_core_send_message(jid, _("You cannot kick power users or "
+            "root users!"));
+        g_free(target_jid);
+        return TRUE;
+    }
+    text = g_strdup_printf("%s was kick from the group!", victim);
+    ng_bot_broadcast(NULL, text);
+    g_free(text);
+    ng_bot_member_data_remove(target_jid);
+    ng_db_member_jid_remove(target_jid);
+    ng_core_remove_roster(target_jid);
+    ng_core_send_unsubscribe_request(target_jid);
+    g_free(target_jid);
+    return TRUE;
+}
+
+static gboolean ng_cmd_shutdown(const gchar *jid)
+{
+    NGDbUserPrivilegeLevel level;
+    if(jid==NULL) return FALSE;
+    if(!ng_db_member_get_privilege_level(jid, &level)) return FALSE;
+    if(level<NG_DB_USER_PRIVILEGE_ROOT)
+    {
+        ng_core_send_message(jid, _("Permission denied."));
+        return TRUE;
+    }
+    ng_bot_broadcast(NULL, _("This group is going to shut down!"));
+    ng_core_send_unavailable_message();
+    ng_main_quit();
+    return TRUE;
+}
+
 gboolean ng_cmd_exec(const gchar *jid, const gchar *command)
 {
     gint argc = 0;
@@ -719,19 +798,7 @@ gboolean ng_cmd_exec(const gchar *jid, const gchar *command)
         g_strfreev(argv);
         return FALSE;
     }
-    if(g_strcmp0(argv[0], "-ping")==0)
-    {
-        ng_cmd_ping(jid);
-        g_strfreev(argv);
-        return TRUE;
-    }
-    else if(g_strcmp0(argv[0], "-add")==0)
-    {
-        flag = ng_cmd_member_add(jid, argc-1, argv+1);
-        g_strfreev(argv);
-        return flag;
-    }
-    else if(g_strcmp0(argv[0], "-nick")==0)
+    if(g_strcmp0(argv[0], "-nick")==0)
     {
         if(argc>1)
         {
@@ -786,6 +853,18 @@ gboolean ng_cmd_exec(const gchar *jid, const gchar *command)
         g_strfreev(argv);
         return flag;
     }
+    else if(g_strcmp0(argv[0], "-ping")==0)
+    {
+        ng_cmd_ping(jid);
+        g_strfreev(argv);
+        return TRUE;
+    }
+    else if(g_strcmp0(argv[0], "-about")==0)
+    {
+        ng_cmd_about(jid);
+        g_strfreev(argv);
+        return TRUE;
+    }
     else if(g_strcmp0(argv[0], "-stop")==0)
     {
         if(argc!=2)
@@ -814,6 +893,12 @@ gboolean ng_cmd_exec(const gchar *jid, const gchar *command)
         g_strfreev(argv);
         return flag;
     }
+    else if(g_strcmp0(argv[0], "-add")==0)
+    {
+        flag = ng_cmd_member_add(jid, argc-1, argv+1);
+        g_strfreev(argv);
+        return flag;
+    }
     else if(g_strcmp0(argv[0], "-ban")==0)
     {
         if(argc!=3)
@@ -836,12 +921,29 @@ gboolean ng_cmd_exec(const gchar *jid, const gchar *command)
         g_strfreev(argv);
         return flag;
     }
+    else if(g_strcmp0(argv[0], "-kick")==0)
+    {
+        if(argc!=2)
+        {
+            g_strfreev(argv);
+            return FALSE;
+        }
+        flag = ng_cmd_member_kick(jid, argv[1]);
+        g_strfreev(argv);
+        return flag;
+    }
     else if(g_strcmp0(argv[0], "-title")==0)
     {
         if(argc==1)
             flag = ng_cmd_set_group_title(jid, NULL);
         else if(argc==2)        
             flag = ng_cmd_set_group_title(jid, argv[1]);
+        g_strfreev(argv);
+        return flag;
+    }
+    else if(g_strcmp0(argv[0], "-shutdown")==0)
+    {
+        flag = ng_cmd_shutdown(jid);
         g_strfreev(argv);
         return flag;
     }
