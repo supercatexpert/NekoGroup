@@ -35,6 +35,7 @@ gchar *ng_utils_get_jid_from_address(const gchar *address);
 gchar *ng_utils_get_resource_from_address(const gchar *address);
 gchar *ng_utils_get_shortname(const gchar *jid);
 gchar *ng_utils_generate_new_nick(const gchar *jid);
+gint64 ng_uitls_get_real_time();
 
 G_END_DECLS
 

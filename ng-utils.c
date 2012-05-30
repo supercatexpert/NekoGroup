@@ -81,6 +81,13 @@ gchar *ng_utils_generate_new_nick(const gchar *jid)
     return rnick;
 }
 
-
+gint64 ng_uitls_get_real_time()
+{
+    GTimeVal tv;
+    gint64 real_time;
+    g_get_current_time(&tv);
+    real_time = (((gint64)tv.tv_sec) * 1000000) + tv.tv_usec;
+    return real_time/1000;
+}
 
 

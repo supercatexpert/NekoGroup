@@ -485,7 +485,7 @@ gboolean ng_db_member_jid_add(const gchar *jid, const gchar *nick)
     }
     else
         member_data.nick = g_strdup(nick);
-    member_data.join_time = g_get_real_time()/1000;
+    member_data.join_time = ng_uitls_get_real_time();
     member_data.allow_pm = TRUE;
     member_doc = ng_db_member_bson_build(&member_data);
     ng_db_member_data_free(&member_data);
@@ -534,7 +534,7 @@ gboolean ng_db_member_set_nick(const gchar *jid, const gchar *nick)
     update = bson_build_full(BSON_TYPE_DOCUMENT, "$set", TRUE,
         bson_build(BSON_TYPE_STRING, "nick", nick, -1, 
         BSON_TYPE_INT64, "rename_freq", freq,
-        BSON_TYPE_UTC_DATETIME, "rename_time", g_get_real_time()/1000,
+        BSON_TYPE_UTC_DATETIME, "rename_time", ng_uitls_get_real_time(),
         BSON_TYPE_NONE),
         BSON_TYPE_NONE);
     bson_finish(update);
@@ -554,7 +554,7 @@ gboolean ng_db_member_set_banned(const gchar *jid, gboolean state,
     gboolean flag;
     if(priv->db_connection==NULL || jid==NULL) return FALSE;
     if(state)
-        ban_time = g_get_real_time()/1000 + length;
+        ban_time = ng_uitls_get_real_time() + length;
     ns = g_strconcat(NG_DB_DATABASE_NAME, ".", priv->member_collection,
         NULL);
     select = bson_build(BSON_TYPE_STRING, "_id", jid, -1, BSON_TYPE_NONE);
@@ -580,7 +580,7 @@ gboolean ng_db_member_set_stopped(const gchar *jid, gboolean state,
     gboolean flag;
     if(priv->db_connection==NULL || jid==NULL) return FALSE;
     if(state)
-        stop_time = g_get_real_time()/1000 + length;
+        stop_time = ng_uitls_get_real_time() + length;
     ns = g_strconcat(NG_DB_DATABASE_NAME, ".", priv->member_collection,
         NULL);
     select = bson_build(BSON_TYPE_STRING, "_id", jid, -1, BSON_TYPE_NONE);
@@ -1156,7 +1156,7 @@ gboolean ng_db_log_add_message(const gchar *jid, const gchar *message)
     if(priv->db_connection==NULL || message==NULL) return FALSE;
     log_data.jid = g_strdup(jid);
     log_data.message = g_strdup(message);
-    log_data.time = g_get_real_time()/1000;
+    log_data.time = ng_uitls_get_real_time();
     log_doc = ng_db_log_bson_build(&log_data);
     ng_db_log_data_free(&log_data);
     ns = g_strconcat(NG_DB_DATABASE_NAME, ".", priv->log_collection,
@@ -1189,15 +1189,13 @@ GList *ng_db_log_get_data(gint64 time, guint num)
     query_doc = bson_new();
     if(time>0)    
     {
-        query_doc = bson_new();
         if(time>0)
         {
-            query_time = g_get_real_time()/1000 - time;
-            cond = bson_build_full(BSON_TYPE_DOCUMENT, "$gte", TRUE,
-               bson_build(BSON_TYPE_UTC_DATETIME, "time", query_time,
-               BSON_TYPE_NONE), BSON_TYPE_NONE);
+            query_time = ng_uitls_get_real_time() - time;
+            cond = bson_build(BSON_TYPE_UTC_DATETIME, "$gte", query_time,
+               BSON_TYPE_NONE);
             bson_finish(cond);
-            bson_append_document(query, "time", cond);
+            bson_append_document(query_doc, "time", cond);
             bson_free(cond);
         }
     }

@@ -34,6 +34,53 @@
 
 #define NG_CMD_RENICK_TIME_LIMIT 10*60*1000
 
+static void ng_cmd_help(const gchar *jid)
+{
+    GString *result_string;
+    NGDbUserPrivilegeLevel level = NG_DB_USER_PRIVILEGE_NORMAL;
+    ng_db_member_get_privilege_level(jid, &level);
+    result_string = g_string_new("");
+    g_string_append(result_string, _("Normal Command Manual:\n"));
+    g_string_append(result_string, _("-help		Show this help message.\n"));
+    g_string_append(result_string, _("-nick		Show your nick, change your "
+        "nick if used with an argument.\n"));
+    g_string_append(result_string, _("-info		Show the profile of the "
+        "given member.\n"));
+    g_string_append(result_string, _("-users		Show the member list "
+        "of this group, can be used with a key word.\n"));
+    g_string_append(result_string, _("-online		Show the online members, "
+        "can be used with a key word.\n"));
+    g_string_append(result_string, _("-log			Show the message log, "
+        "can be used with two arguments: time (with unit d,h,m,s) or "
+        "number.\n"));
+    g_string_append(result_string, _("-ping		Ping the group.\n"));
+    g_string_append(result_string, _("-about		Show the about message "
+        "of NekoGroup.\n"));
+    g_string_append(result_string, _("-stop		Stop receiving messages from "
+        "this group, should be used with time limit (unit: d,h,m,s), you can "
+        "continue receiving messages by using 0 as the argument.\n"));
+    g_string_append(result_string, _("-pm			Send private message to "
+        "another member.\n"));
+    g_string_append(result_string, _("-quit		Leave from this group."));
+    if(level>=NG_DB_USER_PRIVILEGE_POWER)
+    {
+        g_string_append(result_string, _("\n\nPower User Command Manual:\n"));
+        g_string_append(result_string, _("-add		Add new members to this "
+            "group.\n"));
+        g_string_append(result_string, _("-ban		Ban a member.\n"));
+        g_string_append(result_string, _("-release	Release a member from "
+            "banned state.\n"));
+        g_string_append(result_string, _("-kick		Kick a member from this "
+            "group.\n"));
+        g_string_append(result_string, _("-title		Set the title "
+            "(status) of this group.\n"));
+        g_string_append(result_string, _("-shutdown	Shutdown this group "
+            "(only root user can do this)."));
+    }
+    ng_core_send_message(jid, result_string->str);
+    g_string_free(result_string, TRUE);
+}
+
 static void ng_cmd_ping(const gchar *jid)
 {
     time_t local_time;
@@ -136,7 +183,7 @@ static gboolean ng_cmd_member_renick(const gchar *jid, const gchar *nick)
         if(!ng_db_member_jid_get_data(jid, &db_member_data))
             return FALSE;
         time_limit = db_member_data.rename_time + NG_CMD_RENICK_TIME_LIMIT;
-        if(db_member_data.rename_time>0 && time_limit>g_get_real_time()/1000)
+        if(db_member_data.rename_time>0 && time_limit>ng_uitls_get_real_time())
         {
             conf_server_data = ng_config_get_server_data();
             timel = time_limit/1000;
@@ -204,7 +251,7 @@ static gboolean ng_cmd_member_info(const gchar *jid, const gchar *target)
         g_free(target_jid);
         return TRUE;
     }
-    real_time = g_get_real_time()/1000;
+    real_time = ng_uitls_get_real_time();
     conf_server_data = ng_config_get_server_data();
     bot_member_data = ng_bot_get_member_data(target_jid);
     result_string = g_string_new("");
@@ -222,14 +269,17 @@ static gboolean ng_cmd_member_info(const gchar *jid, const gchar *target)
         timel+=conf_server_data->timezone*60;
     time_ptr = localtime(&timel);
     g_string_append_printf(result_string, ngettext(
-        _("Nick has been changed %ld time, the last modified time is %s\n"),
-        _("Nick has been changed %ld times, the last modified time is %s\n"),
-        db_member_data.rename_freq), db_member_data.rename_freq,
+        _("Nick has been changed %lld time, the last modified time is %s\n"),
+        _("Nick has been changed %lld times, the last modified time is %s\n"),
+        (long long int)db_member_data.rename_freq),
+        (long long int)db_member_data.rename_freq,
         g_strdelimit(asctime(time_ptr), "\n", '\0'));
-    g_string_append_printf(result_string, ngettext(_("%ld message, "),
-        _("%ld messages, "), db_member_data.msg_count), db_member_data.msg_count);
-    g_string_append_printf(result_string, ngettext(_("%ld character\n"),
-        _("%ld characters\n"), db_member_data.msg_size), db_member_data.msg_size);
+    g_string_append_printf(result_string, ngettext(_("%lld message, "),
+        _("%lld messages, "), (long long int)db_member_data.msg_count),
+        (long long int)db_member_data.msg_count);
+    g_string_append_printf(result_string, ngettext(_("%lld character\n"),
+        _("%lld characters\n"), (long long int)db_member_data.msg_size),
+        (long long int)db_member_data.msg_size);
     if(db_member_data.stopped)
     {
         if(db_member_data.stop_time<real_time)
@@ -349,9 +399,10 @@ static gboolean ng_cmd_member_list(const gchar *jid, const gchar *key)
         for(i=0;i<db_data_array->len;i++)
         {
             db_member_data = g_ptr_array_index(db_data_array, i);
-            g_string_append_printf(result_string, "* %s (N=%ld, C=%ld)\n",
-                db_member_data->nick, db_member_data->msg_count,
-                db_member_data->msg_size);
+            g_string_append_printf(result_string, "* %s (N=%lld, C=%lld)\n",
+                db_member_data->nick,
+                (long long int)db_member_data->msg_count,
+                (long long int)db_member_data->msg_size);
         }
         g_ptr_array_free(db_data_array, TRUE);
         g_hash_table_destroy(table);
@@ -377,7 +428,7 @@ static gboolean ng_cmd_member_online(const gchar *jid, const gchar *key)
     if(table==NULL) return TRUE;
     g_hash_table_iter_init(&iter, table);
     result_string = g_string_new("");
-    real_time = g_get_real_time()/1000;
+    real_time = ng_uitls_get_real_time();
     if(key!=NULL)
         g_string_append_printf(result_string, _("The online users who's "
             "nicks contain \'%s\':\n"), key);
@@ -462,6 +513,114 @@ static gboolean ng_cmd_member_pm(const gchar *jid, const gchar *target,
     }
     ng_core_send_message(target_jid, result_string->str);
     g_free(target_jid);
+    g_string_free(result_string, TRUE);
+    return TRUE;
+}
+
+static gboolean ng_cmd_member_view_log(const gchar *jid, const gchar *cond1,
+    const gchar *cond2)
+{
+    GList *list;
+    GList *foreach;
+    time_t timel;
+    struct tm *time_ptr;
+    gint64 search_time = 3600000;
+    guint search_num = 50;
+    gint n;
+    gint num;
+    gchar unit;
+    GString *result_string;
+    NGDbLogData *log_data;
+    gchar time_buf[32];
+    const NGConfigServerData *conf_server_data;
+    if(jid==NULL) return FALSE;
+    if(cond1!=NULL || cond2!=NULL)
+    {
+        search_time = 0;
+        search_num = 0;
+    }
+    if(cond1!=NULL)
+    {
+        n = sscanf(cond1, "%d%c", &num, &unit);
+        if(n==1)
+            search_num = num;
+        else if(n==2)
+        {
+            switch(unit)
+            {
+                case 'd':
+                    search_time = 86400 * (gint64)num * 1000;
+                    break;
+                case 'h':
+                    search_time = 3600 * (gint64)num * 1000;
+                    break;
+                case 'm':
+                    search_time = 60 * (gint64)num * 1000;
+                    break;
+                case 's':
+                    search_time = (gint64)num * 1000;
+                    break;
+                default:
+                    ng_core_send_message(jid, _("Wrong time format."));
+                    return TRUE;
+                    break;
+            }
+        }
+    }
+    if(cond2!=NULL)
+    {
+        n = sscanf(cond2, "%d%c", &num, &unit);
+        if(n==1)
+            search_num = num;
+        else if(n==2)
+        {
+            switch(unit)
+            {
+                case 'd':
+                    search_time = 86400 * (gint64)num * 1000;
+                    break;
+                case 'h':
+                    search_time = 3600 * (gint64)num * 1000;
+                    break;
+                case 'm':
+                    search_time = 60 * (gint64)num * 1000;
+                    break;
+                case 's':
+                    search_time = (gint64)num * 1000;
+                    break;
+                default:
+                    ng_core_send_message(jid, _("Wrong time format."));
+                    return TRUE;
+                    break;
+            }
+        }
+    }    
+    list = ng_db_log_get_data(search_time, search_num);
+    if(list==NULL)
+    {
+        ng_core_send_message(jid, _("No message log matched the "
+            "search condition."));
+        return TRUE;
+    }
+    result_string = g_string_new("");
+    conf_server_data = ng_config_get_server_data();
+    for(foreach=list;foreach!=NULL;foreach=g_list_next(foreach))
+    {
+        log_data = foreach->data;
+        if(log_data==NULL) continue;
+        timel = log_data->time/1000;
+        if(conf_server_data!=NULL)
+            timel+=conf_server_data->timezone*60;
+        time_ptr = localtime(&timel);
+        memset(time_buf, 0, 32);
+        strftime(time_buf, 32, "%H:%M:%S", time_ptr);
+        g_string_append_printf(result_string, "\n%s %s",
+            time_buf, log_data->message);
+        ng_db_log_data_destroy(log_data);
+        foreach->data = NULL;
+    }
+    g_list_free(list);
+    ng_core_send_message(jid, result_string->str);
     g_string_free(result_string, TRUE);
     return TRUE;
 }
@@ -757,7 +916,7 @@ static gboolean ng_cmd_member_kick(const gchar *jid, const gchar *victim)
         g_free(target_jid);
         return TRUE;
     }
-    text = g_strdup_printf("%s was kick from the group!", victim);
+    text = g_strdup_printf("%s was kicked from the group!", victim);
     ng_bot_broadcast(NULL, text);
     g_free(text);
     ng_bot_member_data_remove(target_jid);
@@ -852,6 +1011,38 @@ gboolean ng_cmd_exec(const gchar *jid, const gchar *command)
             flag = ng_cmd_member_online(jid, argv[1]);
         g_strfreev(argv);
         return flag;
+    }
+    else if(g_strcmp0(argv[0], "-log")==0)
+    {
+        if(argc==1)
+        {
+            flag = ng_cmd_member_view_log(jid, NULL, NULL);
+            g_strfreev(argv);
+            return flag;
+        }
+        else if(argc==2)
+        {
+            flag = ng_cmd_member_view_log(jid, argv[1], NULL);
+            g_strfreev(argv);
+            return flag;
+        }
+        else if(argc==3)
+        {
+            flag = ng_cmd_member_view_log(jid, argv[1], argv[2]);
+            g_strfreev(argv);
+            return flag;
+        }
+        else
+        {
+            g_strfreev(argv);
+            return FALSE;
+        }
+    }
+    else if(g_strcmp0(argv[0], "-help")==0)
+    {
+        ng_cmd_help(jid);
+        g_strfreev(argv);
+        return TRUE;
     }
     else if(g_strcmp0(argv[0], "-ping")==0)
     {

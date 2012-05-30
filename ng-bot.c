@@ -232,7 +232,7 @@ void ng_bot_broadcast(const gchar *from, const gchar *message)
     gint64 real_time;
     gchar *text;
     if(bot_member_table==NULL || message==NULL) return;
-    real_time = g_get_real_time()/1000;
+    real_time = ng_uitls_get_real_time();
     if(from!=NULL)
     {
         if(g_utf8_strlen(message, -1)>280)
