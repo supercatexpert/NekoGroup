@@ -1,10 +1,11 @@
-CC=gcc
+CC=cc
 PROG_NAME=NekoGroup
 SOURCES=ng-core.c ng-db.c ng-cmd.c ng-config.c ng-bot.c \
     ng-main.c ng-utils.c main.c
 HEADERS=ng-core.h ng-db.h ng-cmd.h ng-config.h ng-bot.h \
     ng-main.h ng-utils.h ng-common.h
-PKGS=glib-2.0 gobject-2.0 loudmouth-1.0 libmongo-client
+PKGS=glib-2.0 gobject-2.0 loudmouth-1.0 libmongo-client gio-2.0 \
+    libsecret-1
 
 SRCS=${SOURCES} ng-marshal.c
 OBJS=${SRCS:.c=.o}
@@ -25,7 +26,7 @@ ${OBJS}:${INCS}
 	${CC} -c $< ${CFLAGS}
 
 clean:
-	rm -f *.o ${PROG_NAME} ng-marshal.c ng-marshal.h
+	rm -f *.o *.gch ${PROG_NAME} ng-marshal.c ng-marshal.h
 
 rebuild: clean all
 

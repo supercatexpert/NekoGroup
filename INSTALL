@@ -1,0 +1,60 @@
+INSTALL
+=======
+
+0. Compile
+----------
+You need: 
+* glib
+* libsecret
+* libmongo-client
+* loudmouth
+
+Install them, then just run 'make'.
+
+1. Install the GSettings schema
+-------------------------------
+$ cp prj.NekoGroup.gschema.xml /usr/share/glib-2.0/schemas
+$ glib-compile-schemas /usr/share/glib-2.0/schemas
+
+2. Configure it as you like
+---------------------------
+In a desktop environment, you can simply use 'dconf-editor' to go 
+through /prj/NekoGroup.
+
+In CLI, you can also use the 'gsettings' tool to configure it.
+
+Be careful. You are supposed to configure your NekoGroup under the 
+same user who runs NekoGroup.
+
+2.1 Password storing
+~~~~~~~~~~~~~~~~~~~~
+You can simply write your passwords unsafely in the settings. However,
+you can also choose a safer way we have provided.
+
+Firstly, turn off the 'unsafe' option.
+$ gsettings set prj.NekoGroup.Server unsafe false
+
+Secondly, let 'NekoGroupPasswordHelper' guide you to store your passwords.
+$ cd password-helper/
+$ make                                  # you may want to do this
+
+Running 'NekoGroupPasswordHelper' without any arguments will print the 
+currently stored passwords. You will see '(null)' if you haven't set 
+the password.
+
+Running 'NekoGroupPasswordHelper --remove' will delete your passwords.
+
+Running 'NekoGroupPasswordHelper --setter-mode' will save your passwords.
+* --db-password : password of the database
+* --server-password : password of the account on which NekoGroup works
+MongoDB doesn't have any users or passwords by default. In this case,
+you could use '--db-password ""' to avoid authentication.
+
+3. Run your server
+------------------
+Firstly start the MongoDB. And then run 
+$ mongod &                              # if you care about security,
+                                        # you may want add a password
+                                        # for MongoDB.
+$ ./NekoGroup
+Enjoy!

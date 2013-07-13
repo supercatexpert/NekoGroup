@@ -17,11 +17,17 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
- 
+
+/*
+ * Modified by Mike Manilone <crtmike@gmx.us>
+ */
+
+#include <gio/gio.h>
+#include <libsecret/secret.h>
 #include "ng-config.h"
 #include "ng-common.h"
 
@@ -36,171 +42,109 @@
 
 static NGConfigServerData config_server_data = {0};
 static NGConfigDbData config_db_data = {0};
+static NGConfigNormalData config_normal_data = {0};
 
-static gchar *ng_config_get_program_dir(const gchar *argv0)
+static const SecretSchema *_get_schema (void)
 {
-    gchar *bin_dir = NULL;
-    gchar *exec_path = NULL;
-    gchar *tmp;
-    char full_path[PATH_MAX];
-    exec_path = g_file_read_link("/proc/self/exe", NULL);
-    if(exec_path!=NULL)
-    {
-        bin_dir = g_path_get_dirname(exec_path);
-        g_free(exec_path);
-        exec_path = NULL;
-    }
-    else exec_path = g_file_read_link("/proc/curproc/file", NULL);
-    if(exec_path!=NULL)
-    {
-        bin_dir = g_path_get_dirname(exec_path);
-        g_free(exec_path);
-        exec_path = NULL;
-    }
-    else exec_path = g_file_read_link("/proc/self/path/a.out", NULL);
-    if(exec_path!=NULL)
-    {
-        bin_dir = g_path_get_dirname(exec_path);
-        g_free(exec_path);
-        exec_path = NULL;
-    }
-    if(bin_dir==NULL)
-    {
-        if(g_path_is_absolute(argv0))
-            exec_path = g_strdup(argv0);
-        else
+    static const SecretSchema schema = {
+        "prj.NekoGroup.Password", SECRET_SCHEMA_NONE,
         {
-            bin_dir = g_get_current_dir();
-            exec_path = g_build_filename(bin_dir, argv0, NULL);
-            g_free(bin_dir);
+            { "type", SECRET_SCHEMA_ATTRIBUTE_STRING },
+            { "NULL", 0 }
         }
-        strncpy(full_path, exec_path, PATH_MAX-1);
-        tmp = g_strdup(exec_path);
-        g_free(exec_path);
-        exec_path = realpath(tmp, full_path);
-        g_free(tmp);
-        if(exec_path!=NULL)
-            bin_dir = g_path_get_dirname(exec_path);
-        else
-            bin_dir = NULL;
-    }
-    if(bin_dir==NULL) bin_dir = g_get_current_dir();
-    return bin_dir;
+    };
+    return &schema;
 }
 
-static gboolean ng_config_load_config(const gchar *file)
+static gint _build_timezone(gchar *string, gboolean freep)
 {
-    GKeyFile *keyfile;
-    gchar *vstring;
-    gint vint;
-    gboolean vbool;
-    gint hour = 0, min = 0;
-    if(file==NULL) return FALSE;
-    keyfile = g_key_file_new();
-    if(!g_key_file_load_from_file(keyfile, file, 0, NULL))
-    {
-        g_key_file_free(keyfile);
-        return FALSE;
-    }
+    gint hour, min;
+    sscanf(string, "%d:%d", &hour, &min);
+    if (freep)
+        g_free (string);
+    return hour*60+min;
+}
 
-    vstring = g_key_file_get_string(keyfile, "Server", "Server", NULL);
+static gboolean ng_config_load_config()
+{
+    GSettings *settings;
+    
+    settings = g_settings_new("prj.NekoGroup.Server");
+    
     g_free(config_server_data.server);
-    config_server_data.server = g_strdup(vstring);
-    g_free(vstring);
+    config_server_data.server = g_settings_get_string(settings, 
+        "server");
     
-    vstring = g_key_file_get_string(keyfile, "Server", "JID", NULL);
     g_free(config_server_data.jid);
-    config_server_data.jid = g_strdup(vstring);
-    g_free(vstring);
+    config_server_data.jid = g_settings_get_string(settings, "jid");
     
-    vstring = g_key_file_get_string(keyfile, "Server", "User", NULL);
     g_free(config_server_data.user);
-    config_server_data.user = g_strdup(vstring);
-    g_free(vstring); 
-
-    vstring = g_key_file_get_string(keyfile, "Server", "Password", NULL);
+    config_server_data.user = g_settings_get_string(settings, "user");
+    
+    config_server_data.unsafe = g_settings_get_boolean(settings, "unsafe");
+    
     g_free(config_server_data.password);
-    config_server_data.password = g_strdup(vstring);
-    g_free(vstring);    
+    if (config_server_data.unsafe)
+    {
+        config_server_data.password = g_settings_get_string(settings, 
+            "password");
+    }
     
-    vint = g_key_file_get_integer(keyfile, "Server", "Port", NULL);
-    config_server_data.port = vint;
+    config_server_data.port = g_settings_get_int(settings, "port");
     
-    vbool = g_key_file_get_boolean(keyfile, "Server", "RequireTLS", NULL);
-    config_server_data.require_tls = vbool;
-
-    vstring = g_key_file_get_string(keyfile, "Server", "RootID", NULL);
+    config_server_data.require_tls = g_settings_get_boolean(settings,
+        "require-tls");
+    
     g_free(config_server_data.root_id);
-    config_server_data.root_id = g_strdup(vstring);
-    g_free(vstring);
-
-    vstring = g_key_file_get_string(keyfile, "Server", "Title", NULL);
+    config_server_data.root_id = g_settings_get_string(settings,
+        "root-jid");
+    
     g_free(config_server_data.title);
-    config_server_data.title = g_strdup(vstring);
-    g_free(vstring); 
+    config_server_data.title = g_settings_get_string(settings,
+        "title");
     
-    vstring = g_key_file_get_string(keyfile, "Server", "TimeZone", NULL);
-    sscanf(vstring, "%d:%d", &hour, &min);
-    config_server_data.timezone = hour * 60 + min;
-    g_free(vstring);
+    config_server_data.timezone = _build_timezone (g_settings_get_string(settings,
+        "timezone"), TRUE);
     
-    vstring = g_key_file_get_string(keyfile, "Database", "Server", NULL);
+    g_object_unref(settings);
+    settings = g_settings_new("prj.NekoGroup.Database");
+    
     g_free(config_db_data.server);
-    config_db_data.server = g_strdup(vstring);
-    g_free(vstring);
-
-    vint = g_key_file_get_integer(keyfile, "Database", "Port", NULL);
-    config_db_data.port = vint;
-
-    vstring = g_key_file_get_string(keyfile, "Database", "User", NULL);
+    config_db_data.server = g_settings_get_string(settings, "server");
+    
+    config_db_data.port = g_settings_get_int(settings, "port");
+    
     g_free(config_db_data.user);
-    config_db_data.user = g_strdup(vstring);
-    g_free(vstring); 
-
-    vstring = g_key_file_get_string(keyfile, "Database", "Password", NULL);
+    config_db_data.user = g_settings_get_string(settings, "user");
+    
     g_free(config_db_data.password);
-    config_db_data.password = g_strdup(vstring);
-    g_free(vstring); 
-
-    vstring = g_key_file_get_string(keyfile, "Database", "MemberCollection",
-        NULL);
+    if(config_server_data.unsafe)
+    {
+        config_db_data.password = g_settings_get_string(settings, 
+            "password");
+    }
+    
     g_free(config_db_data.member_collection);
-    config_db_data.member_collection = g_strdup(vstring);
-    g_free(vstring);
-
-    vstring = g_key_file_get_string(keyfile, "Database", "LogCollection",
-        NULL);
+    config_db_data.member_collection = g_settings_get_string(settings,
+        "member-collection");
     g_free(config_db_data.log_collection);
-    config_db_data.log_collection = g_strdup(vstring);
-    g_free(vstring);
-
-    g_key_file_free(keyfile);
+    config_db_data.log_collection = g_settings_get_string(settings,
+        "log-collection");
+    
+    g_object_unref(settings);
+    settings = g_settings_new("prj.NekoGroup.Normal");
+    
+    config_normal_data.renick_timelimit = g_settings_get_int(settings, 
+        "renick-timelimit");
+    
+    g_object_unref(settings);
     return TRUE;
 }
 
 gboolean ng_config_init(const gchar *argv0)
 {
-    gchar *prog_dir;
-    gchar *conf_file = NULL;
-    gboolean flag = FALSE;
-    prog_dir = ng_config_get_program_dir(argv0);
-    if(prog_dir!=NULL)
-    {
-        conf_file = g_build_filename(prog_dir, "data", "config.ini", NULL);
-        g_free(prog_dir);
-    }
-    if(conf_file!=NULL)
-    {
-        flag = ng_config_load_config(conf_file);
-        g_free(conf_file);
-    }
-    if(!flag)
-    {
-        conf_file = g_strdup("/etc/nekogroup.conf");
-        flag = ng_config_load_config(conf_file);
-        g_free(conf_file);
-    }
-    return flag;
+    ng_config_load_config();
+    return TRUE;
 }
 
 void ng_config_exit()
@@ -230,7 +174,47 @@ const NGConfigDbData *ng_config_get_db_data()
     return &config_db_data;
 }
 
+const NGConfigNormalData *ng_config_get_normal_data()
+{
+    return &config_normal_data;
+}
 
+/**
+ * ng_config_get_server_password_safely:
+ * 
+ * Obtain server password from libsecret.
+ * 
+ * Return value: (transfer-full): A newly-allocated string holding 
+ * the password. For your safety, free it as soon as possible.
+ */
+gchar *ng_config_get_server_password_safely(void)
+{
+    GError *error;
+    gchar *password, *retval;
+    error = NULL;
+    password = secret_password_lookup_sync(_get_schema(),
+        NULL, &error, "type", "server", NULL);
+    retval = g_strdup(password);
+    secret_password_free(password);
+    return retval;
+}
 
-
-
+/**
+ * ng_config_get_database_password_safely:
+ * 
+ * Obtain database password from libsecret.
+ * 
+ * Return value: (transfer-full): A newly-allocated string holding 
+ * the password. For your safety, free it as soon as possible.
+ */
+gchar *ng_config_get_database_password_safely(void)
+{
+    GError *error;
+    gchar *password, *retval;
+    error = NULL;
+    password = secret_password_lookup_sync(_get_schema(),
+        NULL, &error, "type", "database", NULL);
+    retval = g_strdup(password);
+    secret_password_free(password);
+    return retval;
+}

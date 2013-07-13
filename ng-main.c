@@ -17,9 +17,13 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
+ */
+
+/**
+ * Modified by Mike Manilone <crtmike@gmx.us>
  */
 
 #include <glib/gprintf.h>
@@ -36,7 +40,7 @@ gboolean ng_main_run(gint *argc, gchar **argv[])
 {
     const NGConfigServerData *server_data;
     const NGConfigDbData *db_data;
-    g_type_init();
+    gchar *db_password, *server_password;
     if(!ng_config_init(*argv[0]))
     {
         g_error("Cannot load configuration data!");
@@ -44,19 +48,33 @@ gboolean ng_main_run(gint *argc, gchar **argv[])
     }
     server_data = ng_config_get_server_data();
     db_data = ng_config_get_db_data();
+    if(server_data->unsafe)
+    {
+        db_password = g_strdup(db_data->password);
+        server_password = g_strdup(server_data->password);
+    }
+    else
+    {
+        db_password = ng_config_get_database_password_safely();
+        g_assert(db_password!=NULL);
+        server_password = ng_config_get_server_password_safely();
+        g_assert(server_password!=NULL);
+    }
     if(!ng_db_init(db_data->server, db_data->port, db_data->member_collection,
-        db_data->log_collection, db_data->user, db_data->password))
+        db_data->log_collection, db_data->user, db_password))
     {
         g_error("Cannot initialize database!");
         return FALSE;
-    }    
+    }
     if(ng_core_init(server_data->server, server_data->port,
         server_data->require_tls, server_data->jid, server_data->user,
-        server_data->password)!=0)
+        server_password)!=0)
     {
         g_error("Cannot initialize communiation core!");
         return FALSE;
     }
+    g_free(db_password);
+    g_free(server_password);
     ng_core_set_title(server_data->title);
     ng_bot_init();
     main_loop = g_main_loop_new(NULL, FALSE);
@@ -72,7 +90,7 @@ void ng_main_exit()
     ng_config_exit();
 }
 
-void ng_main_quit()
+void ng_main_quit_loop()
 {
     g_main_loop_quit(main_loop);
 }

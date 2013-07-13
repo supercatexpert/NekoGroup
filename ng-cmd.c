@@ -17,9 +17,13 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
+ */
+
+/**
+ * Modified by Mike Manilone <crtmike@gmx.us>
  */
 
 #include <time.h>
@@ -31,8 +35,6 @@
 #include "ng-config.h"
 #include "ng-utils.h"
 #include "ng-main.h"
-
-#define NG_CMD_RENICK_TIME_LIMIT 10*60*1000
 
 static void ng_cmd_help(const gchar *jid)
 {
@@ -140,6 +142,7 @@ static gboolean ng_cmd_member_renick(const gchar *jid, const gchar *nick)
     struct tm *time_ptr;
     NGDbMemberData db_member_data = {0};
     const NGConfigServerData *conf_server_data;
+    const NGConfigNormalData *conf_normal_data;
     gunichar *ucs4_string;
     glong ucs4_string_len = 0;
     glong i;
@@ -182,7 +185,9 @@ static gboolean ng_cmd_member_renick(const gchar *jid, const gchar *nick)
         }
         if(!ng_db_member_jid_get_data(jid, &db_member_data))
             return FALSE;
-        time_limit = db_member_data.rename_time + NG_CMD_RENICK_TIME_LIMIT;
+        conf_normal_data = ng_config_get_normal_data();
+        time_limit = db_member_data.rename_time + 
+            conf_normal_data->renick_timelimit;
         if(db_member_data.rename_time>0 && time_limit>ng_uitls_get_real_time())
         {
             conf_server_data = ng_config_get_server_data();
@@ -939,7 +944,7 @@ static gboolean ng_cmd_shutdown(const gchar *jid)
     }
     ng_bot_broadcast(NULL, _("This group is going to shut down!"));
     ng_core_send_unavailable_message();
-    ng_main_quit();
+    ng_main_quit_loop();
     return TRUE;
 }
 

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 gboolean ng_main_run(gint *argc, gchar **argv[]);
 void ng_main_exit();
-void ng_main_quit();
+void ng_main_quit_loop();
 
 G_END_DECLS
 

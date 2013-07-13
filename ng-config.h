@@ -17,9 +17,13 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
+ */
+
+/*
+ * Modified by Mike Manilone <crtmike@gmx.us>
  */
 
 #ifndef HAVE_NG_CONFIG_H
@@ -35,6 +39,7 @@ G_BEGIN_DECLS
 
 typedef struct NGConfigServerData NGConfigServerData;
 typedef struct NGConfigDbData NGConfigDbData;
+typedef struct NGConfigNormalData NGConfigNormalData;
 
 struct NGConfigServerData {
     gchar *server;
@@ -43,6 +48,7 @@ struct NGConfigServerData {
     gchar *password;
     guint16 port;
     gboolean require_tls;
+    gboolean unsafe;
     gchar *root_id;
     gint timezone;
     gchar *title;
@@ -57,10 +63,17 @@ struct NGConfigDbData {
     gchar *log_collection;
 };
 
+struct NGConfigNormalData {
+    guint renick_timelimit;
+};
+
 gboolean ng_config_init(const gchar *argv0);
 void ng_config_exit();
 const NGConfigServerData *ng_config_get_server_data();
 const NGConfigDbData *ng_config_get_db_data();
+const NGConfigNormalData *ng_config_get_normal_data();
+gchar *ng_config_get_server_password_safely(void);
+gchar *ng_config_get_database_password_safely(void);
 
 G_END_DECLS
 

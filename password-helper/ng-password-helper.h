@@ -1,10 +1,10 @@
 /*
- * NekoGroup Utility API Header Declaration
+ * NekoGroup Password Helper
  *
- * ng-utils.h
+ * ng-password-helper.h
  * This file is part of NekoGroup
  *
- * Copyright (C) 2012 - SuperCat, license: GPL v3
+ * Copyright (C) 2013 - Mike Manilone, license: GPL v3
  *
  * NekoGroup is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,23 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
+#ifndef HAVE_NG_PASSWORD_HELPER_H
+#define HAVE_NG_PASSWORD_HELPER_H
 
-#ifndef HAVE_NG_UTILS_H
-#define HAVE_NG_UTILS_H
 
-#include <stdlib.h>
-#include <string.h>
-#include <glib.h>
 
-G_BEGIN_DECLS
-
-gchar *ng_utils_get_jid_from_address(const gchar *address);
-gchar *ng_utils_get_resource_from_address(const gchar *address);
-gchar *ng_utils_get_shortname(const gchar *jid);
-gchar *ng_utils_generate_new_nick(const gchar *jid);
-gint64 ng_uitls_get_real_time();
-
-G_END_DECLS
-
-#endif
-
+#endif /* HAVE_NG_PASSWORD_HELPER_H */
