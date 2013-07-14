@@ -1,0 +1,59 @@
+Introduction:
+
+NekoGroup is a broadcast bot in XMPP protocol, for creating a group 
+(buddies can communicate with each other).
+
+Developing platform:
+
+Operating System: Debian Wheezy for AMD64
+Compiler: gcc 4.7.2
+Programming Language: C
+Dependent Libraries (Minimum Runtime Requirement): glib-2.0 (>=2.32)
+    libloudmouth mongo-client
+    
+Developing stage:
+
+Unstable, features are implemented basically, somehow not well tested.
+
+License:
+
+GNU GPL v3.
+You MUST accept the GPL v3 License, then you can use this program and the
+source code.
+You can get the GPL v3 License (plain text) here:
+http://www.gnu.org/licenses/gpl.txt
+Or read the COPYING file in the source archive.
+
+How to install this program:
+
+Get the latest version from Github:
+
+git clone git://github.com/supercatexpert/NekoGroup.git
+
+Now only source code is available, you should compile it, then you can
+use this program. Before you compile it, you should check the
+developing environment, and the libraries which this program depends. On
+Debian/Ubuntu, you can run the commands below to help you install the packages
+that the compilation needed: 
+
+sudo apt-get install build-essential libtool libglib2.0-dev libloudmouth1-dev \
+    libmongo-client-dev
+
+Then you can try to compile it:
+
+./configure
+make
+sudo make install
+
+(You should prepare a configuration file before running NekoGroup. I am 
+completing this part....)
+
+then just run /usr/local/bin/NekoGroup, feel happy with it!
+
+This program is in experimental stage now. We provide absolute no WARRANTY. 
+If you found any bugs, please send an e-mail to me, and report the bugs you
+found. My e-mail: supercatexpert@gmail.com . Or send the Issue on the 
+Github project page.
+
+
+

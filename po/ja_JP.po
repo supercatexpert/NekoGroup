@@ -1,0 +1,373 @@
+# Japanese translations for NekoGroup package.
+# Copyright (C) 2013 THE NekoGroup'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the NekoGroup package.
+# SuperCat <supercatexpert@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NekoGroup 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-07-15 02:06+0800\n"
+"PO-Revision-Date: 2013-07-15 02:07+0800\n"
+"Last-Translator: SuperCat <supercatexpert@gmail.com>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../src/ng-cmd.c:43
+msgid "Normal Command Manual:\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:44
+msgid "-help\t\tShow this help message.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:45
+msgid "-nick\t\tShow your nick, change your nick if used with an argument.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:47
+msgid "-info\t\tShow the profile of the given member.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:49
+msgid ""
+"-users\t\tShow the member list of this group, can be used with a key word.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:51
+msgid "-online\t\tShow the online members, can be used with a key word.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:53
+msgid ""
+"-log\t\t\tShow the message log, can be used with two arguments: time (with "
+"unit d,h,m,s) or number.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:56
+msgid "-ping\t\tPing the group.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:57
+msgid "-about\t\tShow the about message of NekoGroup.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:59
+msgid ""
+"-stop\t\tStop receiving messages from this group, should be used with time "
+"limit (unit: d,h,m,s), you can continue receiving messages by using 0 as the "
+"argument.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:62
+msgid "-pm\t\t\tSend private message to another member.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:64
+msgid "-quit\t\tLeave from this group."
+msgstr ""
+
+#: ../src/ng-cmd.c:67
+msgid ""
+"\n"
+"\n"
+"Power User Command Manual:\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:68
+msgid "-add\t\tAdd new members to this group.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:70
+msgid "-ban\t\tBan a member.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:71
+msgid "-release\tRelease a member from banned state.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:73
+msgid "-kick\t\tKick a member from this group.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:75
+msgid "-title\t\tSet the title (status) of this group.\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:77
+msgid "-shutdown\tShutdown this group (only root user can do this)."
+msgstr ""
+
+#: ../src/ng-cmd.c:96
+#, c-format
+msgid "Pong at %s"
+msgstr ""
+
+#: ../src/ng-cmd.c:104
+msgid ""
+"About NekoGroup\n"
+"A group chatting robot based on GLib and libloudmouth.\n"
+"Version: 0.1.0, build date: 2012-05-29\n"
+"Copyright (C) 2012 - SuperCat, license: GPL v3."
+msgstr ""
+
+#: ../src/ng-cmd.c:121 ../src/ng-cmd.c:733 ../src/ng-cmd.c:842
+#: ../src/ng-cmd.c:871 ../src/ng-cmd.c:888 ../src/ng-cmd.c:938
+msgid "Permission denied."
+msgstr ""
+
+#: ../src/ng-cmd.c:127
+#, c-format
+msgid "Trying to add new member: %s"
+msgstr ""
+
+#: ../src/ng-cmd.c:151
+msgid "The nick should be less than 32 characters."
+msgstr ""
+
+#: ../src/ng-cmd.c:169
+msgid "The nick contains invalid characters!"
+msgstr ""
+
+#: ../src/ng-cmd.c:180
+msgid "This nick is already used."
+msgstr ""
+
+#: ../src/ng-cmd.c:193
+#, c-format
+msgid "Your re-nick skill is cooling down, retry this skill after time: %s"
+msgstr ""
+
+#: ../src/ng-cmd.c:203
+#, c-format
+msgid "%s has changed the nick to: %s"
+msgstr ""
+
+#: ../src/ng-cmd.c:214
+#, c-format
+msgid "Your nick is: %s"
+msgstr ""
+
+#: ../src/ng-cmd.c:220
+msgid "Your nick is not set."
+msgstr ""
+
+#: ../src/ng-cmd.c:241 ../src/ng-cmd.c:493 ../src/ng-cmd.c:740
+#: ../src/ng-cmd.c:849 ../src/ng-cmd.c:895
+msgid "Target member does not exist!"
+msgstr ""
+
+#: ../src/ng-cmd.c:249
+msgid "Target member does not exist in the database!"
+msgstr ""
+
+#: ../src/ng-cmd.c:262
+#, c-format
+msgid "JID: %s\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:266
+#, c-format
+msgid "Nick: %s\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:272
+#, c-format
+msgid "Nick has been changed %lld time, the last modified time is %s\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:273
+#, c-format
+msgid "Nick has been changed %lld times, the last modified time is %s\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:277
+#, c-format
+msgid "%lld message, "
+msgstr ""
+
+#: ../src/ng-cmd.c:278
+#, c-format
+msgid "%lld messages, "
+msgstr ""
+
+#: ../src/ng-cmd.c:280
+#, c-format
+msgid "%lld character\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:281
+#, c-format
+msgid "%lld characters\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:288 ../src/ng-cmd.c:301
+#, c-format
+msgid "Not stopped\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:296
+#, c-format
+msgid "Stopped, until %s\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:307 ../src/ng-cmd.c:320
+#, c-format
+msgid "Not banned\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:315
+#, c-format
+msgid "Banned, until %s\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:325
+#, c-format
+msgid "Join time: %s\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:327
+#, c-format
+msgid "Allow private message: %s\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:341
+#, c-format
+msgid "Privilege: %s"
+msgstr ""
+
+#: ../src/ng-cmd.c:349
+#, c-format
+msgid ""
+"\n"
+"Online resource: [%s]"
+msgstr ""
+
+#: ../src/ng-cmd.c:383
+#, c-format
+msgid "The members who's nicks contain '%s':\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:386
+#, c-format
+msgid "All members:\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:411 ../src/ng-cmd.c:474
+#, c-format
+msgid "%u member listed"
+msgstr ""
+
+#: ../src/ng-cmd.c:411 ../src/ng-cmd.c:474
+#, c-format
+msgid "%u members listed"
+msgstr ""
+
+#: ../src/ng-cmd.c:433
+#, c-format
+msgid "The online member who's nicks contain '%s':\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:436
+#, c-format
+msgid "All online members:\n"
+msgstr ""
+
+#: ../src/ng-cmd.c:461
+msgid "<Stopped> "
+msgstr ""
+
+#: ../src/ng-cmd.c:501
+msgid "Target member does not want to receive private message!"
+msgstr ""
+
+#: ../src/ng-cmd.c:509
+#, c-format
+msgid "(P.M.) [%s] "
+msgstr ""
+
+#: ../src/ng-cmd.c:565 ../src/ng-cmd.c:593 ../src/ng-cmd.c:668
+#: ../src/ng-cmd.c:686 ../src/ng-cmd.c:778 ../src/ng-cmd.c:797
+msgid "Wrong time format."
+msgstr ""
+
+#: ../src/ng-cmd.c:602
+msgid "No message log matched the search condition."
+msgstr ""
+
+#: ../src/ng-cmd.c:663 ../src/ng-cmd.c:694
+msgid "You have been released from stop state."
+msgstr ""
+
+#: ../src/ng-cmd.c:700
+msgid "Why do you try to stop for more than 2 years?"
+msgstr ""
+
+#: ../src/ng-cmd.c:709
+#, c-format
+msgid "You have been stopped until %s"
+msgstr ""
+
+#: ../src/ng-cmd.c:753
+msgid "Root members cannot be banned!"
+msgstr ""
+
+#: ../src/ng-cmd.c:760
+msgid "You cannot ban power members or root members!"
+msgstr ""
+
+#: ../src/ng-cmd.c:769 ../src/ng-cmd.c:805 ../src/ng-cmd.c:856
+#, c-format
+msgid "%s has been released from banned state."
+msgstr ""
+
+#: ../src/ng-cmd.c:815
+msgid "Why do you try to ban the victim for more than 2 years?"
+msgstr ""
+
+#: ../src/ng-cmd.c:825
+#, c-format
+msgid "%s has been banned until %s"
+msgstr ""
+
+#: ../src/ng-cmd.c:908
+msgid "Root members cannot be kicked!"
+msgstr ""
+
+#: ../src/ng-cmd.c:915
+msgid "You cannot kick power members or root members!"
+msgstr ""
+
+#: ../src/ng-cmd.c:941
+msgid "This group is going to shut down!"
+msgstr ""
+
+#: ../src/ng-bot.c:49
+msgid "Invalid command!"
+msgstr ""
+
+#: ../src/ng-bot.c:118
+#, c-format
+msgid "%s wants to join this group."
+msgstr ""
+
+#: ../src/ng-bot.c:133
+#, c-format
+msgid "%s has been added to this group."
+msgstr ""
+
+#: ../src/ng-bot.c:240
+msgid "The message is too long!"
+msgstr ""
+
+#: ../src/ng-bot.c:245
+msgid "You are not a member yet."
+msgstr ""
+
+#: ../src/ng-bot.c:252
+msgid "You have been banned."
+msgstr ""

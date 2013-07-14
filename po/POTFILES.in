@@ -1,0 +1,17 @@
+# List of source files which contain translatable strings.
+src/ng-cmd.c
+src/ng-core.c
+src/ng-main.c
+src/ng-utils.c
+src/ng-bot.c
+src/ng-config.c
+src/ng-db.c
+src/ng-marshal.c
+
+
+
+
+
+
+     
+
