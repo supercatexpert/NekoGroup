@@ -24,6 +24,7 @@ SET(NekoGroup_HEADERS
 	ng-utils.h)
 
 GLIB_MARSHAL("ng_marshal" "ng-marshal" "${CMAKE_CURRENT_BINARY}")
+ADD_SCHEMA(prj.NekoGroup.gschema.xml)
 ADD_EXECUTABLE(NekoGroup ${NekoGroup_SOURCES} ${NekoGroup_HEADERS})
 INSTALL(TARGETS NekoGroup RUNTIME DESTINATION bin)
 TARGET_LINK_LIBRARIES(NekoGroup ${DEPS_LIBRARIES})

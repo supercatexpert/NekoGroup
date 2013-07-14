@@ -5,6 +5,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 ### 
 include(UseGlibMarshal)
+include(GSettings)
 find_package(PkgConfig REQUIRED)
 find_package(Gettext REQUIRED)
 find_program(INTLTOOL_EXTRACT intltool-extract REQUIRED)
