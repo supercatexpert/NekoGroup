@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
@@ -26,7 +26,7 @@
 #include "ng-common.h"
 #include "ng-main.h"
 #include "ng-utils.h"
-#include "ng-marshal.h"
+#include <ng-marshal.h>
 
 /**
  * SECTION: ng-core
@@ -241,7 +241,7 @@ static void ng_core_connection_close_cb(LmConnection *connection,
     LmDisconnectReason reason, gpointer data)
 {
     g_message("Disconnected from server, reason: %d", reason);
-    ng_main_quit();
+    ng_main_quit_loop();
 }
 
 static void ng_core_finalize(GObject *object)
@@ -409,7 +409,6 @@ gint ng_core_init(const gchar *server, guint16 port, gboolean use_ssl,
         return -3;
     }
     g_message("Connected to the XMPP server.");
-    
     if(!lm_connection_authenticate_and_block(connection, user, pass,
         "bot", &error))
     {

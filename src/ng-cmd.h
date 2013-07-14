@@ -1,7 +1,7 @@
 /*
- * NekoGroup Main Header Declaration
+ * Command Header Declaration
  *
- * ng-main.h
+ * ng-cmd.h
  * This file is part of NekoGroup
  *
  * Copyright (C) 2012 - SuperCat, license: GPL v3
@@ -17,26 +17,25 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
- 
-#ifndef HAVE_NG_MAIN_H
-#define HAVE_NG_MAIN_H
 
-#include <stdlib.h>
-#include <glib.h>
+#ifndef HAVE_NG_COMMAND_H
+#define HAVE_NG_COMMAND_H
+
 #include <string.h>
-#include <unistd.h>
+#include <glib.h>
+#include <loudmouth/loudmouth.h>
+#include <glib/gprintf.h>
 
 G_BEGIN_DECLS
 
-gboolean ng_main_run(gint *argc, gchar **argv[]);
-void ng_main_exit();
-void ng_main_quit();
+gboolean ng_cmd_exec(const gchar *jid, const gchar *command);
 
 G_END_DECLS
 
 #endif
+
 

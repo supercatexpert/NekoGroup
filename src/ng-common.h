@@ -1,7 +1,7 @@
 /*
- * Command Header Declaration
+ * NekoGroup Common Header Declaration
  *
- * ng-cmd.h
+ * ng-common.h
  * This file is part of NekoGroup
  *
  * Copyright (C) 2012 - SuperCat, license: GPL v3
@@ -17,25 +17,28 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
 
-#ifndef HAVE_NG_COMMAND_H
-#define HAVE_NG_COMMAND_H
+#ifndef HAVE_NG_COMMON_H
+#define HAVE_NG_COMMON_H
 
-#include <string.h>
 #include <glib.h>
-#include <loudmouth/loudmouth.h>
-#include <glib/gprintf.h>
+#include <glib/gi18n.h>
 
 G_BEGIN_DECLS
 
-gboolean ng_cmd_exec(const gchar *jid, const gchar *command);
+#ifdef G_LOG_DOMAIN
+#undef G_LOG_DOMAIN
+#endif
+
+#define G_LOG_DOMAIN "NekoGroup"
+#define GETTEXT_PACKAGE "NekoGroup"
+#define PACKAGE "NekoGroup"
 
 G_END_DECLS
 
 #endif
-
 

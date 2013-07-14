@@ -17,9 +17,13 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
+ */
+
+/**
+ * Modified by Mike Manilone <crtmike@gmx.us>
  */
 
 #include <mongo.h>
@@ -213,7 +217,7 @@ gboolean ng_db_init(const gchar *host, gint port,
         g_warning("Cannot connect to mongo database!");
         return FALSE;
     }
-    if(user!=NULL && pass!=NULL)
+    if(user!=NULL && pass!=NULL && strlen(user) && strlen(pass))
     {
         if(!mongo_sync_cmd_authenticate(connection, NG_DB_DATABASE_NAME,
             user, pass))

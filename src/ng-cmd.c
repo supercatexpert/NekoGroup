@@ -17,9 +17,13 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
+ */
+
+/**
+ * Modified by Mike Manilone <crtmike@gmx.us>
  */
 
 #include <time.h>
@@ -31,8 +35,6 @@
 #include "ng-config.h"
 #include "ng-utils.h"
 #include "ng-main.h"
-
-#define NG_CMD_RENICK_TIME_LIMIT 10*60*1000
 
 static void ng_cmd_help(const gchar *jid)
 {
@@ -61,7 +63,9 @@ static void ng_cmd_help(const gchar *jid)
         "continue receiving messages by using 0 as the argument.\n"));
     g_string_append(result_string, _("-pm			Send private message to "
         "another member.\n"));
-    g_string_append(result_string, _("-quit		Leave from this group."));
+    g_string_append(result_string, _("-quit		Leave from this group.\n"));
+    g_string_append(result_string, _("-me			/me from IRC.\n"));
+    g_string_append(result_string, _("-say			Say anything!\n"));
     if(level>=NG_DB_USER_PRIVILEGE_POWER)
     {
         g_string_append(result_string, _("\n\nPower User Command Manual:\n"));
@@ -75,7 +79,7 @@ static void ng_cmd_help(const gchar *jid)
         g_string_append(result_string, _("-title		Set the title "
             "(status) of this group.\n"));
         g_string_append(result_string, _("-shutdown	Shutdown this group "
-            "(only root user can do this)."));
+            "(only root user can do this).\n"));
     }
     ng_core_send_message(jid, result_string->str);
     g_string_free(result_string, TRUE);
@@ -140,6 +144,7 @@ static gboolean ng_cmd_member_renick(const gchar *jid, const gchar *nick)
     struct tm *time_ptr;
     NGDbMemberData db_member_data = {0};
     const NGConfigServerData *conf_server_data;
+    const NGConfigNormalData *conf_normal_data;
     gunichar *ucs4_string;
     glong ucs4_string_len = 0;
     glong i;
@@ -182,7 +187,9 @@ static gboolean ng_cmd_member_renick(const gchar *jid, const gchar *nick)
         }
         if(!ng_db_member_jid_get_data(jid, &db_member_data))
             return FALSE;
-        time_limit = db_member_data.rename_time + NG_CMD_RENICK_TIME_LIMIT;
+        conf_normal_data = ng_config_get_normal_data();
+        time_limit = db_member_data.rename_time + 
+            conf_normal_data->renick_timelimit;
         if(db_member_data.rename_time>0 && time_limit>ng_uitls_get_real_time())
         {
             conf_server_data = ng_config_get_server_data();
@@ -939,7 +946,18 @@ static gboolean ng_cmd_shutdown(const gchar *jid)
     }
     ng_bot_broadcast(NULL, _("This group is going to shut down!"));
     ng_core_send_unavailable_message();
-    ng_main_quit();
+    ng_main_quit_loop();
+    return TRUE;
+}
+
+static gboolean ng_cmd_me(const gchar *jid, const gchar*message)
+{
+    gchar *tosend, *nick;
+    ng_db_member_get_nick_name(jid, &nick);
+    tosend = g_strdup_printf(" * %s %s", nick, message);
+    ng_bot_broadcast(NULL, tosend);
+    g_free(nick);
+    g_free(tosend);
     return TRUE;
 }
 
@@ -1131,6 +1149,43 @@ gboolean ng_cmd_exec(const gchar *jid, const gchar *command)
             flag = ng_cmd_set_group_title(jid, argv[1]);
         g_strfreev(argv);
         return flag;
+    }
+    else if(g_strcmp0(argv[0], "-me")==0)
+    {
+        if(argc>=2)
+        {
+            guint i;
+            GString *message;
+            message = g_string_new("");
+            for(i = 1; i<argc; i++)
+            {
+                g_string_append(message, argv[i]);
+                g_string_append_c(message, ' ');
+            }
+            flag = ng_cmd_me(jid, message->str);
+            g_string_free(message, TRUE);
+        }
+        else
+        {
+            flag = ng_cmd_me(jid, _("did nothing."));
+        }
+        g_strfreev(argv);
+        return flag;
+    }
+    else if(g_strcmp0(argv[0], "-say")==0)
+    {
+        GString *message;
+        guint i;
+        message = g_string_new("");
+        for(i = 1; i < argc; i++)
+        {
+            g_string_append(message, argv[i]);
+            g_string_append_c(message, ' ');
+        }
+        ng_bot_broadcast(jid, message->str);
+        g_string_free(message, TRUE);
+        g_strfreev(argv);
+        return TRUE;
     }
     else if(g_strcmp0(argv[0], "-shutdown")==0)
     {

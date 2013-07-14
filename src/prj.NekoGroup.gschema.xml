@@ -1,0 +1,85 @@
+<schemalist>
+    <schema id="prj.NekoGroup.Server" path="/prj/NekoGroup/Server/">
+      <key name="server" type="s">
+          <summary>The server on which you run NekoGroup</summary>
+          <default>"jabber.org"</default>
+      </key>
+      <key name="jid" type="s">
+          <summary>JID of the server</summary>
+          <default>""</default>
+      </key>
+      <key name="user" type="s">
+          <summary>User name of the account for NekoGroup</summary>
+          <default>""</default>
+      </key>
+      <key name="port" type="i">
+          <summary>Port of the account for NekoGroup</summary>
+          <default>5222</default>
+      </key>
+      <key name="require-tls" type="b">
+          <summary>Whether the server requires TLS</summary>
+          <default>true</default>
+      </key>
+      <key name="root-jid" type="s">
+          <summary>JID of the 'root' member</summary>
+          <default>""</default>
+      </key>
+      <key name="timezone" type="s">
+          <summary>Time zone</summary>
+          <default>"+0:00"</default>
+          <description></description>
+      </key>
+      <key name="title" type="s">
+          <summary>Title of your group</summary>
+          <default>"Testing"</default>
+      </key>
+      <key name="unsafe" type="b">
+          <summary>Whether run NekoGroup unsafely</summary>
+          <default>true</default>
+          <description>This only affects "password"</description>
+      </key>
+      <key name="password" type="s">
+          <summary>Password of the account for NekoGroup</summary>
+          <default>""</default>
+          <description>It may be unsafe to write your password here,
+          we provide a safer way with libsecret, but if you are sure 
+          the GSettings registries are only accessible from you, you could 
+          safely turn on this option.</description>
+      </key>
+      </schema>
+    <schema id="prj.NekoGroup.Database" path="/prj/NekoGroup/Database/">
+        <key name="server" type="s">
+            <summary>Where database server is</summary>
+            <default>"localhost"</default>
+        </key>
+        <key name="port" type="i">
+            <summary>Port of the database server</summary>
+            <default>27017</default>
+        </key>
+        <key name="user" type="s">
+            <summary>User name of the database connection</summary>
+            <default>""</default>
+        </key>
+        <key name="password" type="s">
+            <summary>Password of the database connection</summary>
+            <default>""</default>
+            <description>This is affected by "unsafe"</description>
+        </key>
+        <key name="member-collection" type="s">
+            <summary>Name of the member collection</summary>
+            <default>"members"</default>
+        </key>
+        <key name="log-collection" type="s">
+            <summary>Name of the log collection</summary>
+            <default>"logs"</default>
+        </key>
+    </schema>
+    <schema id="prj.NekoGroup.Normal" path="/prj/NekoGroup/Normal/">
+        <key name="renick-timelimit" type="i">
+            <summary>Limit re-nicking</summary>
+            <default>600000</default>
+            <description>Time value in microseconds. It is 10minutes by 
+            default</description>
+        </key>
+    </schema>
+</schemalist>

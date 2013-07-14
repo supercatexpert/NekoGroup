@@ -1,7 +1,7 @@
 /*
- * NekoGroup Common Header Declaration
+ * NekoGroup Utility API Header Declaration
  *
- * ng-common.h
+ * ng-utils.h
  * This file is part of NekoGroup
  *
  * Copyright (C) 2012 - SuperCat, license: GPL v3
@@ -17,26 +17,25 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with <RhythmCat>; if not, write to the Free Software
+ * along with <NekoGroup>; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
 
-#ifndef HAVE_NG_COMMON_H
-#define HAVE_NG_COMMON_H
+#ifndef HAVE_NG_UTILS_H
+#define HAVE_NG_UTILS_H
 
+#include <stdlib.h>
+#include <string.h>
 #include <glib.h>
-#include <glib/gi18n.h>
 
 G_BEGIN_DECLS
 
-#ifdef G_LOG_DOMAIN
-#undef G_LOG_DOMAIN
-#endif
-
-#define G_LOG_DOMAIN "NekoGroup"
-#define GETTEXT_PACKAGE "NekoGroup"
-#define PACKAGE "NekoGroup"
+gchar *ng_utils_get_jid_from_address(const gchar *address);
+gchar *ng_utils_get_resource_from_address(const gchar *address);
+gchar *ng_utils_get_shortname(const gchar *jid);
+gchar *ng_utils_generate_new_nick(const gchar *jid);
+gint64 ng_uitls_get_real_time();
 
 G_END_DECLS
 

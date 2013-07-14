@@ -1,0 +1,439 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-07-14 08:52+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:49
+msgid "Invalid command!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:118
+#, c-format
+msgid "%s wants to join this group."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:133
+#, c-format
+msgid "%s has been added to this group."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:240
+msgid "The message is too long!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:245
+msgid "You are not a member yet."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:252
+msgid "You have been banned."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:45
+msgid "Normal Command Manual:\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:46
+msgid "-help\t\tShow this help message.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:47
+msgid "-nick\t\tShow your nick, change your nick if used with an argument.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:49
+msgid "-info\t\tShow the profile of the given member.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:51
+msgid ""
+"-users\t\tShow the member list of this group, can be used with a key word.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:53
+msgid "-online\t\tShow the online members, can be used with a key word.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:55
+msgid ""
+"-log\t\t\tShow the message log, can be used with two arguments: time (with "
+"unit d,h,m,s) or number.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:58
+msgid "-ping\t\tPing the group.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:59
+msgid "-about\t\tShow the about message of NekoGroup.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:61
+msgid ""
+"-stop\t\tStop receiving messages from this group, should be used with time "
+"limit (unit: d,h,m,s), you can continue receiving messages by using 0 as the "
+"argument.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:64
+msgid "-pm\t\t\tSend private message to another member.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:66
+msgid "-quit\t\tLeave from this group."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:69
+msgid ""
+"\n"
+"\n"
+"Power User Command Manual:\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:70
+msgid "-add\t\tAdd new members to this group.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:72
+msgid "-ban\t\tBan a member.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:73
+msgid "-release\tRelease a member from banned state.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:75
+msgid "-kick\t\tKick a member from this group.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:77
+msgid "-title\t\tSet the title (status) of this group.\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:79
+msgid "-shutdown\tShutdown this group (only root user can do this)."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:98
+#, c-format
+msgid "Pong at %s"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:106
+msgid ""
+"About NekoGroup\n"
+"A group chatting robot based on GLib and libloudmouth.\n"
+"Version: 0.1.0, build date: 2012-05-29\n"
+"Copyright (C) 2012 - SuperCat, license: GPL v3."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:123
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:737
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:846
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:875
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:892
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:942
+msgid "Permission denied."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:129
+#, c-format
+msgid "Trying to add new member: %s"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:154
+msgid "The nick should be less than 32 characters."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:172
+msgid "The nick contains invalid characters!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:183
+msgid "This nick is already used."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:198
+#, c-format
+msgid "Your re-nick skill is cooling down, retry this skill after time: %s"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:208
+#, c-format
+msgid "%s has changed the nick to: %s"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:219
+#, c-format
+msgid "Your nick is: %s"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:225
+msgid "Your nick is not set."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:246
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:497
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:744
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:853
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:899
+msgid "Target member does not exist!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:254
+msgid "Target member does not exist in the database!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:267
+#, c-format
+msgid "JID: %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:271
+#, c-format
+msgid "Nick: %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:277
+#, c-format
+msgid "Nick has been changed %lld time, the last modified time is %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:278
+#, c-format
+msgid "Nick has been changed %lld times, the last modified time is %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:282
+#, c-format
+msgid "%lld message, "
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:283
+#, c-format
+msgid "%lld messages, "
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:285
+#, c-format
+msgid "%lld character\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:286
+#, c-format
+msgid "%lld characters\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:293
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:306
+#, c-format
+msgid "Not stopped\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:301
+#, c-format
+msgid "Stopped, until %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:312
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:325
+#, c-format
+msgid "Not banned\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:320
+#, c-format
+msgid "Banned, until %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:330
+#, c-format
+msgid "Join time: %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:332
+#, c-format
+msgid "Allow private message: %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:346
+#, c-format
+msgid "Privilege: %s"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:354
+#, c-format
+msgid ""
+"\n"
+"Online resource: [%s]"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:388
+#, c-format
+msgid "The users who's nicks contain '%s':\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:391
+#, c-format
+msgid "All users:\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:416
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:479
+#, c-format
+msgid "%u user listed"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:416
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:479
+#, c-format
+msgid "%u users listed"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:438
+#, c-format
+msgid "The online users who's nicks contain '%s':\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:441
+#, c-format
+msgid "All online users:\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:466
+msgid "<Stopped> "
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:505
+msgid "Target member does not want to receive private message!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:513
+#, c-format
+msgid "(P.M.) [%s] "
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:569
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:597
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:672
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:690
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:782
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:801
+msgid "Wrong time format."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:606
+msgid "No message log matched the search condition."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:667
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:698
+msgid "You have been released from stop state."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:704
+msgid "Why do you try to stop for more than 2 years?"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:713
+#, c-format
+msgid "You have been stopped until %s"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:757
+msgid "Root users cannot be banned!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:764
+msgid "You cannot ban power users or root users!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:773
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:809
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:860
+#, c-format
+msgid "%s has been released from banned state."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:819
+msgid "Why do you try to ban the victim for more than 2 years?"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:829
+#, c-format
+msgid "%s has been banned until %s"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:912
+msgid "Root users cannot be kicked!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:919
+msgid "You cannot kick power users or root users!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:945
+msgid "This group is going to shut down!"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:84
+msgid " - NekoGroup Password Helper"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:88
+#, c-format
+msgid "Option parsing failed: %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:100
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:109
+#, c-format
+msgid "Failed to remove the server password: %s"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:122
+msgid "Please provide me with two passwords."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:128
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:136
+#, c-format
+msgid "Failed to store a password: %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:148
+#, c-format
+msgid "This may be unsafe! Press 'Enter' to continue. Press Ctrl+C to break."
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:154
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:161
+#, c-format
+msgid "Failed to read password: %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:165
+#, c-format
+msgid ""
+"Server Password   : %s\n"
+"Database Password : %s\n"
+msgstr ""
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:167
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:168
+msgid "(null)"
+msgstr ""
