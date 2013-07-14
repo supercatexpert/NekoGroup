@@ -21,8 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
-
+#include <config.h>
 #include <glib.h>
+#include <locale.h>
 #include <glib/gi18n.h>
 #include <libsecret/secret.h>
 #include "ng-password-helper.h"
@@ -81,6 +82,9 @@ gint main(gint argc, gchar*argv[])
     GError *error;
     GOptionContext *context;
     error = NULL;
+    setlocale(LC_ALL, "");
+    bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
+    textdomain(GETTEXT_PACKAGE);
     context = g_option_context_new(_(" - NekoGroup Password Helper"));
     g_option_context_add_main_entries(context, entries, NULL);
     if (!g_option_context_parse(context, &argc, &argv, &error))

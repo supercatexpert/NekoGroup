@@ -1,0 +1,456 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Maa Kae <crtmike@gmx.us>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 20130714\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-07-14 08:52+0800\n"
+"PO-Revision-Date: 2013-07-14 09:21+0800\n"
+"Last-Translator: Maa Kae <crtmike@gmx.us>\n"
+"Language-Team: 漢語 <>\n"
+"Language: Simplified Chinese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.6\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:69
+msgid ""
+"\n"
+"\n"
+"Power User Command Manual:\n"
+msgstr ""
+"\n"
+"\n"
+"管理员命令手册：\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:354
+#, c-format
+msgid ""
+"\n"
+"Online resource: [%s]"
+msgstr ""
+"\n"
+"在线资源：【%s】"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:84
+msgid " - NekoGroup Password Helper"
+msgstr " - NekoGroup 密码助手"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:285
+#, c-format
+msgid "%lld character\n"
+msgstr "%lld 个字符\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:286
+#, c-format
+msgid "%lld characters\n"
+msgstr "%lld 个字符\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:282
+#, c-format
+msgid "%lld message, "
+msgstr "%lld 条消息，"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:283
+#, c-format
+msgid "%lld messages, "
+msgstr "%lld 条消息，"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:133
+#, c-format
+msgid "%s has been added to this group."
+msgstr "%s 已加入此群。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:829
+#, c-format
+msgid "%s has been banned until %s"
+msgstr "%s 已被禁言到 %s"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:773
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:809
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:860
+#, c-format
+msgid "%s has been released from banned state."
+msgstr "%s 现在不禁言了。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:208
+#, c-format
+msgid "%s has changed the nick to: %s"
+msgstr "%s 改名成 %s 了"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:118
+#, c-format
+msgid "%s wants to join this group."
+msgstr "%s 想要加入此群。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:416
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:479
+#, c-format
+msgid "%u user listed"
+msgstr "列出了 %u 位用户"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:416
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:479
+#, c-format
+msgid "%u users listed"
+msgstr "列出了 %u 位用户"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:513
+#, c-format
+msgid "(P.M.) [%s] "
+msgstr "（私信） [%s] "
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:167
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:168
+msgid "(null)"
+msgstr "（未设置）"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:59
+msgid "-about\t\tShow the about message of NekoGroup.\n"
+msgstr "-about\t\t显示 NekoGroup 的关于信息。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:70
+msgid "-add\t\tAdd new members to this group.\n"
+msgstr "-add\t\t为本群添加新成员。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:72
+msgid "-ban\t\tBan a member.\n"
+msgstr "-ban\t\t禁言一位成员。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:46
+msgid "-help\t\tShow this help message.\n"
+msgstr "-help\t\t显示此帮助信息。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:49
+msgid "-info\t\tShow the profile of the given member.\n"
+msgstr "-info\t\t显示给出成员的概括。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:75
+msgid "-kick\t\tKick a member from this group.\n"
+msgstr "-kick\t\t将一位成员从本群踢出。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:55
+msgid ""
+"-log\t\t\tShow the message log, can be used with two arguments: time (with "
+"unit d,h,m,s) or number.\n"
+msgstr ""
+"-log\t\t\t显示消息记录，可以带两个参数：时间（单位 d 天、h 时、m 分、s 秒）或"
+"数字。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:47
+msgid "-nick\t\tShow your nick, change your nick if used with an argument.\n"
+msgstr "-nick\t\t显示你的，如果带有一个参数则更改昵称。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:53
+msgid "-online\t\tShow the online members, can be used with a key word.\n"
+msgstr "-online\t\t显示在线成员，可以带一个参数使用。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:58
+msgid "-ping\t\tPing the group.\n"
+msgstr "-ping\t\t检测连通状态。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:64
+msgid "-pm\t\t\tSend private message to another member.\n"
+msgstr "-pm\t\t\t给一位成员发送私信。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:66
+msgid "-quit\t\tLeave from this group."
+msgstr "-quit\t\t离开此群。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:73
+msgid "-release\tRelease a member from banned state.\n"
+msgstr "-release\t接触一位成员的禁言状态。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:79
+msgid "-shutdown\tShutdown this group (only root user can do this)."
+msgstr "-shutdown\t关闭此群（只有 root 用户可以）。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:61
+msgid ""
+"-stop\t\tStop receiving messages from this group, should be used with time "
+"limit (unit: d,h,m,s), you can continue receiving messages by using 0 as the "
+"argument.\n"
+msgstr ""
+"-stop\t\t停止接受此群信息，应当用时间作为参数调用（单位：天 d、时 h、分 m、"
+"秒 s），可通过传递 0 作参数来取消该操作。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:77
+msgid "-title\t\tSet the title (status) of this group.\n"
+msgstr "-title\t\t设置本群标题（状态）。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:51
+msgid ""
+"-users\t\tShow the member list of this group, can be used with a key word.\n"
+msgstr "-users\t\t显示此群的成员列表，可以带一个参数使用。\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:466
+msgid "<Stopped> "
+msgstr "〈暂停〉"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:106
+msgid ""
+"About NekoGroup\n"
+"A group chatting robot based on GLib and libloudmouth.\n"
+"Version: 0.1.0, build date: 2012-05-29\n"
+"Copyright (C) 2012 - SuperCat, license: GPL v3."
+msgstr ""
+"关于 NekoGroup\n"
+"基于 GLib 和 libloudmouth 的群组聊天机器人。\n"
+"版本：0.1.0，构建日期：2012-05-29\n"
+"版权所有 © 2012 - SuperCat，授权：GPL V3。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:441
+#, c-format
+msgid "All online users:\n"
+msgstr "所有在线用户：\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:391
+#, c-format
+msgid "All users:\n"
+msgstr "所有用户：\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:332
+#, c-format
+msgid "Allow private message: %s\n"
+msgstr "允许私信：%s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:320
+#, c-format
+msgid "Banned, until %s\n"
+msgstr "禁言到 %s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:154
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:161
+#, c-format
+msgid "Failed to read password: %s\n"
+msgstr "读取密码失败：%s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:100
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:109
+#, c-format
+msgid "Failed to remove the server password: %s"
+msgstr "移除服务器密码失败：%s"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:128
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:136
+#, c-format
+msgid "Failed to store a password: %s\n"
+msgstr "储存密码失败：%s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:49
+msgid "Invalid command!"
+msgstr "无效命令！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:267
+#, c-format
+msgid "JID: %s\n"
+msgstr "帐号：%s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:330
+#, c-format
+msgid "Join time: %s\n"
+msgstr "加入时间 %s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:277
+#, c-format
+msgid "Nick has been changed %lld time, the last modified time is %s\n"
+msgstr "昵称修改了 %lld 次，最后修改时间是 %s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:278
+#, c-format
+msgid "Nick has been changed %lld times, the last modified time is %s\n"
+msgstr "昵称修改了 %lld 次，最后修改时间是 %s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:271
+#, c-format
+msgid "Nick: %s\n"
+msgstr "昵称：%s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:606
+msgid "No message log matched the search condition."
+msgstr "没有符合搜索条件的消息记录。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:45
+msgid "Normal Command Manual:\n"
+msgstr "常规命令手册：\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:312
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:325
+#, c-format
+msgid "Not banned\n"
+msgstr "未禁言\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:293
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:306
+#, c-format
+msgid "Not stopped\n"
+msgstr "未暂停\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:88
+#, c-format
+msgid "Option parsing failed: %s\n"
+msgstr "选项解析失败：%s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:123
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:737
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:846
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:875
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:892
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:942
+msgid "Permission denied."
+msgstr "权限禁止。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:122
+msgid "Please provide me with two passwords."
+msgstr "请把两个密码都给我。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:98
+#, c-format
+msgid "Pong at %s"
+msgstr "乓！ %s"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:346
+#, c-format
+msgid "Privilege: %s"
+msgstr "权限：%s"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:757
+msgid "Root users cannot be banned!"
+msgstr "root 用户不能被禁言！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:912
+msgid "Root users cannot be kicked!"
+msgstr "root 用户不能被踢！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:165
+#, c-format
+msgid ""
+"Server Password   : %s\n"
+"Database Password : %s\n"
+msgstr ""
+"服务器密码：%s\n"
+"数据库密码：%s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:301
+#, c-format
+msgid "Stopped, until %s\n"
+msgstr "暂停到 %s\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:254
+msgid "Target member does not exist in the database!"
+msgstr "目标成员不在数据库中！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:246
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:497
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:744
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:853
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:899
+msgid "Target member does not exist!"
+msgstr "目标成员不存在！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:505
+msgid "Target member does not want to receive private message!"
+msgstr "目标用户不想收到私信！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:240
+msgid "The message is too long!"
+msgstr "消息太长！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:172
+msgid "The nick contains invalid characters!"
+msgstr "昵称包含无效字符！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:154
+msgid "The nick should be less than 32 characters."
+msgstr "昵称应该少于 32 字符。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:438
+#, c-format
+msgid "The online users who's nicks contain '%s':\n"
+msgstr "名中含有「%s」的在线用户：\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:388
+#, c-format
+msgid "The users who's nicks contain '%s':\n"
+msgstr "名中含有「%s」的用户：\n"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:945
+msgid "This group is going to shut down!"
+msgstr "此群即将关闭！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/password-helper/ng-password-helper.c:148
+#, c-format
+msgid "This may be unsafe! Press 'Enter' to continue. Press Ctrl+C to break."
+msgstr "此行为可能不安全！按下回车继续，按下 Ctrl+C 中止。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:183
+msgid "This nick is already used."
+msgstr "昵称名花有主。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:129
+#, c-format
+msgid "Trying to add new member: %s"
+msgstr "努力加入新成员：%s"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:819
+msgid "Why do you try to ban the victim for more than 2 years?"
+msgstr "你为什么要把这个可怜虫禁言两年以上⁈"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:704
+msgid "Why do you try to stop for more than 2 years?"
+msgstr "你为什么要暂停两年以上⁈"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:569
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:597
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:672
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:690
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:782
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:801
+msgid "Wrong time format."
+msgstr "错误的时间格式。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:245
+msgid "You are not a member yet."
+msgstr "你尚未成为成员。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:764
+msgid "You cannot ban power users or root users!"
+msgstr "你不能禁言管理员或 root 用户！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:919
+msgid "You cannot kick power users or root users!"
+msgstr "你不能踢出管理员或 root 用户！"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-bot.c:252
+msgid "You have been banned."
+msgstr "你被封禁了。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:667
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:698
+msgid "You have been released from stop state."
+msgstr "你现在不暂停了。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:713
+#, c-format
+msgid "You have been stopped until %s"
+msgstr "你开始暂停到 %s"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:225
+msgid "Your nick is not set."
+msgstr "你还没有名字。"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:219
+#, c-format
+msgid "Your nick is: %s"
+msgstr "你的昵称是 %s"
+
+#: /home/mike/Projects/NekoGroup/build/po/../..//src/ng-cmd.c:198
+#, c-format
+msgid "Your re-nick skill is cooling down, retry this skill after time: %s"
+msgstr "你的重命名技能冷却中，%s 后再试试吧！"

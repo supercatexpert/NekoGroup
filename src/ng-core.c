@@ -26,7 +26,7 @@
 #include "ng-common.h"
 #include "ng-main.h"
 #include "ng-utils.h"
-#include "ng-marshal.h"
+#include <ng-marshal.h>
 
 /**
  * SECTION: ng-core

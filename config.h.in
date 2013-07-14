@@ -1,0 +1,3 @@
+#define datadir "@CMAKE_INSTALL_PREFIX@/share"
+#define GETTEXT_PACKAGE "NekoGroup"
+#define LOCALEDIR "@CMAKE_INSTALL_PREFIX@/share/locale"
